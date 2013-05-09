@@ -4,8 +4,8 @@ import java.nio.FloatBuffer;
 
 public class Vec2 {
 	
-	protected float x;
-	protected float y;
+	protected final float x;
+	protected final float y;
 	
 	protected Vec2() {
 		this.x = 0;

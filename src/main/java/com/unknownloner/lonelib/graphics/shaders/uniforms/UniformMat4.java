@@ -10,7 +10,7 @@ import com.unknownloner.lonelib.math.Mat4;
 public class UniformMat4 extends ShaderUniform {
 
 	private final Mat4 value;
-	private static final FloatBuffer dataBuffer = BufferUtils.createFloatBuffer(4 * 4);
+	private static final FloatBuffer dataBuffer = BufferUtils.createFloatBuffer(16);
 	
 	public UniformMat4(int location, Mat4 value) {
 		super(location);
