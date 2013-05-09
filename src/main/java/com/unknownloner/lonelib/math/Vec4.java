@@ -4,10 +4,10 @@ import java.nio.FloatBuffer;
 
 public class Vec4 {
 	
-	protected float x;
-	protected float y;
-	protected float z;
-	protected float w;
+	protected final float x;
+	protected final float y;
+	protected final float z;
+	protected final float w;
 	
 	protected Vec4() {
 		this.x = 0;
