@@ -1,6 +1,5 @@
 package com.unknownloner.lonelib.util;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.Buffer;
