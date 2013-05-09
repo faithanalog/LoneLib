@@ -539,11 +539,10 @@ public class Mat4 {
 	 * @return The result of the top-left 3x3 matrix * vec3
 	 */
 	public static Vec3 transform(Mat4 mat4, Vec3 vec3) {
-		Vec3 dest = new Vec3();
-		dest.x = mat4.m00 * vec3.x + mat4.m10 * vec3.y + mat4.m20 * vec3.z;
-		dest.y = mat4.m01 * vec3.x + mat4.m11 * vec3.y + mat4.m21 * vec3.z;
-		dest.z = mat4.m02 * vec3.x + mat4.m12 * vec3.y + mat4.m22 * vec3.z;
-		return dest;
+		float x = mat4.m00 * vec3.x + mat4.m10 * vec3.y + mat4.m20 * vec3.z;
+		float y = mat4.m01 * vec3.x + mat4.m11 * vec3.y + mat4.m21 * vec3.z;
+		float z = mat4.m02 * vec3.x + mat4.m12 * vec3.y + mat4.m22 * vec3.z;
+		return new Vec3(x, y, z);
 	}
 	
 	/**
@@ -553,12 +552,11 @@ public class Mat4 {
 	 * @return mat4 * vec4
 	 */
 	public static Vec4 transform(Mat4 mat4, Vec4 vec4) {
-		Vec4 dest = new Vec4();
-		dest.x = mat4.m00 * vec4.x + mat4.m10 * vec4.y + mat4.m20 * vec4.z + mat4.m30 * vec4.w;
-		dest.y = mat4.m01 * vec4.x + mat4.m11 * vec4.y + mat4.m21 * vec4.z + mat4.m31 * vec4.w;
-		dest.z = mat4.m02 * vec4.x + mat4.m12 * vec4.y + mat4.m22 * vec4.z + mat4.m32 * vec4.w;
-		dest.w = mat4.m03 * vec4.x + mat4.m13 * vec4.y + mat4.m23 * vec4.z + mat4.m33 * vec4.w;
-		return dest;
+		float x = mat4.m00 * vec4.x + mat4.m10 * vec4.y + mat4.m20 * vec4.z + mat4.m30 * vec4.w;
+		float y = mat4.m01 * vec4.x + mat4.m11 * vec4.y + mat4.m21 * vec4.z + mat4.m31 * vec4.w;
+		float z = mat4.m02 * vec4.x + mat4.m12 * vec4.y + mat4.m22 * vec4.z + mat4.m32 * vec4.w;
+		float w = mat4.m03 * vec4.x + mat4.m13 * vec4.y + mat4.m23 * vec4.z + mat4.m33 * vec4.w;
+		return new Vec4(x, y, z, w);
 	}
 	
 	/**

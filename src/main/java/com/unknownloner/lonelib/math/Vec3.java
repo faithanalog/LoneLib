@@ -4,9 +4,9 @@ import java.nio.FloatBuffer;
 
 public class Vec3 {
 	
-	protected float x;
-	protected float y;
-	protected float z;
+	protected final float x;
+	protected final float y;
+	protected final float z;
 	
 	protected Vec3() {
 		this.x = 0;
