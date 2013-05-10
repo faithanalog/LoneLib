@@ -4,13 +4,15 @@ package com.unknownloner.lonelib.util;
 public class MathUtil {
 	
 	public static float PI = (float)Math.PI;
+	public static float PI180 = PI / 180f;
+	public static float PI360 = PI / 360f;
 	
 	public static float toDegrees(float radians) {
 		return radians * 180 / PI;
 	}
 	
 	public static float toRadians(float degrees) {
-		return degrees * PI / 180F;
+		return degrees * PI180;
 	}
 	
 	public static short[] quadToTri(short[] inds) {
