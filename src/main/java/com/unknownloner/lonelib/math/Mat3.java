@@ -4,29 +4,38 @@ import java.nio.FloatBuffer;
 
 public class Mat3 {
 	
-	protected float m00;
-	protected float m01;
-	protected float m02;
-	protected float m10;
-	protected float m11;
-	protected float m12;
-	protected float m20;
-	protected float m21;
-	protected float m22;
+	protected final float m00;
+	protected final float m01;
+	protected final float m02;
+	protected final float m10;
+	protected final float m11;
+	protected final float m12;
+	protected final float m20;
+	protected final float m21;
+	protected final float m22;
 	
 	public static final Mat3 ZERO;
 	public static final Mat3 IDENTITY;
 	
 	static {
 		ZERO = new Mat3();
-		IDENTITY = new Mat3();
-		IDENTITY.m00 = 1F;
-		IDENTITY.m11 = 1F;
-		IDENTITY.m22 = 1F;
+		IDENTITY = new Mat3(new float[] {
+				1, 0, 0,
+				0, 1, 0,
+				0, 0, 1,
+		});
 	}
 	
 	protected Mat3() {
-		
+		m00 = 0;
+		m01 = 0;
+		m02 = 0;
+		m10 = 0;
+		m11 = 0;
+		m12 = 0;
+		m20 = 0;
+		m21 = 0;
+		m22 = 0;
 	}
 	
 	public Mat3(Mat3 src) {
@@ -51,6 +60,22 @@ public class Mat3 {
 		m20 = src.get();
 		m21 = src.get();
 		m22 = src.get();
+	}
+	
+	/**
+	 * Creates a Mat3 from 9 consecutive values in src
+	 * @param src The data for matrix creation
+	 */
+	public Mat3(float[] src) {
+		m00 = src[0];
+		m01 = src[1];
+		m02 = src[2];
+		m10 = src[3];
+		m11 = src[4];
+		m12 = src[5];
+		m20 = src[6];
+		m21 = src[7];
+		m22 = src[8];
 	}
 	
 	public Mat3(float[] src, int offset) {
@@ -103,91 +128,91 @@ public class Mat3 {
 	}
 	
 	public static Mat3 add(Mat3 left, Mat3 right) {
-		Mat3 dest = new Mat3();
-		dest.m00 = left.m00 + right.m00;
-		dest.m01 = left.m01 + right.m01;
-		dest.m02 = left.m02 + right.m02;
-		dest.m10 = left.m10 + right.m10;
-		dest.m11 = left.m11 + right.m11;
-		dest.m12 = left.m12 + right.m12;
-		dest.m20 = left.m20 + right.m20;
-		dest.m21 = left.m21 + right.m21;
-		dest.m22 = left.m22 + right.m22;
-		return dest;
+		float[] dest = new float[9];
+		dest[0] = left.m00 + right.m00;
+		dest[1] = left.m01 + right.m01;
+		dest[2] = left.m02 + right.m02;
+		dest[3] = left.m10 + right.m10;
+		dest[4] = left.m11 + right.m11;
+		dest[5] = left.m12 + right.m12;
+		dest[6] = left.m20 + right.m20;
+		dest[7] = left.m21 + right.m21;
+		dest[8] = left.m22 + right.m22;
+		return new Mat3(dest);
 	}
 	
 	public static Mat3 sub(Mat3 left, Mat3 right) {
-		Mat3 dest = new Mat3();
-		dest.m00 = left.m00 - right.m00;
-		dest.m01 = left.m01 - right.m01;
-		dest.m02 = left.m02 - right.m02;
-		dest.m10 = left.m10 - right.m10;
-		dest.m11 = left.m11 - right.m11;
-		dest.m12 = left.m12 - right.m12;
-		dest.m20 = left.m20 - right.m20;
-		dest.m21 = left.m21 - right.m21;
-		dest.m22 = left.m22 - right.m22;
-		return dest;
+		float[] dest = new float[9];
+		dest[1] = left.m00 - right.m00;
+		dest[2] = left.m01 - right.m01;
+		dest[3] = left.m02 - right.m02;
+		dest[4] = left.m10 - right.m10;
+		dest[5] = left.m11 - right.m11;
+		dest[6] = left.m12 - right.m12;
+		dest[7] = left.m20 - right.m20;
+		dest[8] = left.m21 - right.m21;
+		dest[9] = left.m22 - right.m22;
+		return new Mat3(dest);
 	}
 	
 	public static Mat3 mul(Mat3 left, Mat3 right) {
-		Mat3 dest = new Mat3();
-		dest.m00 = left.m00 * right.m00 + left.m10 * right.m01 + left.m20 * right.m02;
-		dest.m10 = left.m00 * right.m10 + left.m10 * right.m11 + left.m20 * right.m12;
-		dest.m20 = left.m00 * right.m20 + left.m10 * right.m21 + left.m20 * right.m22;
-		
-		dest.m01 = left.m01 * right.m00 + left.m11 * right.m01 + left.m21 * right.m02;
-		dest.m11 = left.m01 * right.m10 + left.m11 * right.m11 + left.m21 * right.m12;
-		dest.m21 = left.m01 * right.m20 + left.m11 * right.m21 + left.m21 * right.m22;
-		
-		dest.m02 = left.m02 * right.m00 + left.m12 * right.m01 + left.m22 * right.m02;
-		dest.m12 = left.m02 * right.m10 + left.m12 * right.m11 + left.m22 * right.m12;
-		dest.m22 = left.m02 * right.m20 + left.m12 * right.m21 + left.m22 * right.m22;
-		return dest;
+		float[] dest = new float[9];
+		dest[0] = left.m00 * right.m00 + left.m10 * right.m01 + left.m20 * right.m02;
+		dest[1] = left.m01 * right.m00 + left.m11 * right.m01 + left.m21 * right.m02;
+		dest[2] = left.m02 * right.m00 + left.m12 * right.m01 + left.m22 * right.m02;
+		dest[3] = left.m00 * right.m10 + left.m10 * right.m11 + left.m20 * right.m12;
+		dest[4] = left.m01 * right.m10 + left.m11 * right.m11 + left.m21 * right.m12;
+		dest[5] = left.m02 * right.m10 + left.m12 * right.m11 + left.m22 * right.m12;
+		dest[6] = left.m00 * right.m20 + left.m10 * right.m21 + left.m20 * right.m22;
+		dest[7] = left.m01 * right.m20 + left.m11 * right.m21 + left.m21 * right.m22;
+		dest[8] = left.m02 * right.m20 + left.m12 * right.m21 + left.m22 * right.m22;
+		return new Mat3(dest);
 	}
 	
 	public static Mat3 negate(Mat3 src) {
-		Mat3 dest = new Mat3();
-		dest.m00 = -src.m00;
-		dest.m01 = -src.m01;
-		dest.m02 = -src.m02;
-		dest.m10 = -src.m10;
-		dest.m11 = -src.m11;
-		dest.m12 = -src.m12;
-		dest.m20 = -src.m20;
-		dest.m21 = -src.m21;
-		dest.m22 = -src.m22;
-		return dest;
+		float[] dest = new float[9];
+		dest[0] = -src.m00;
+		dest[1] = -src.m01;
+		dest[2] = -src.m02;
+		dest[3] = -src.m10;
+		dest[4] = -src.m11;
+		dest[5] = -src.m12;
+		dest[6] = -src.m20;
+		dest[7] = -src.m21;
+		dest[8] = -src.m22;
+		return new Mat3(dest);
 	}
 	
 	public static Mat3 transpose(Mat3 src) {
-		Mat3 dest = new Mat3();
-		dest.m00 = src.m00;
-		dest.m01 = src.m10;
-		dest.m02 = src.m20;
+		float[] dest = new float[9];
+		dest[0] = src.m00;
+		dest[1] = src.m10;
+		dest[2] = src.m20;
 		
-		dest.m10 = src.m01;
-		dest.m11 = src.m11;
-		dest.m12 = src.m21;
+		dest[3] = src.m01;
+		dest[4] = src.m11;
+		dest[5] = src.m21;
 		
-		dest.m20 = src.m02;
-		dest.m21 = src.m12;
-		dest.m22 = src.m22;
-		return dest;
+		dest[6] = src.m02;
+		dest[7] = src.m12;
+		dest[8] = src.m22;
+		return new Mat3(dest);
 	}
 	
 	public static Mat3 mul(Mat3 src, float scalar) {
-		Mat3 dest = src.copy();
-		dest.m00 *= scalar;
-		dest.m01 *= scalar;
-		dest.m02 *= scalar;
-		dest.m10 *= scalar;
-		dest.m11 *= scalar;
-		dest.m12 *= scalar;
-		dest.m20 *= scalar;
-		dest.m21 *= scalar;
-		dest.m22 *= scalar;
-		return dest;
+		float[] dest = new float[9];
+		dest[0] = src.m00 * scalar;
+		dest[1] = src.m01 * scalar;
+		dest[2] = src.m02 * scalar;
+		
+		dest[3] = src.m10 * scalar;
+		dest[4] = src.m11 * scalar;
+		dest[5] = src.m12 * scalar;
+		
+		dest[6] = src.m20 * scalar;
+		dest[7] = src.m21 * scalar;
+		dest[8] = src.m22 * scalar;
+		return new Mat3(dest);
 	}
 	
 	public static float determinant(Mat3 src) {
@@ -200,19 +225,26 @@ public class Mat3 {
 				- ((m02 * m11 * m20) + (m12 * m21 * m00) + (m22 * m01 * m10));
 	}
 	
+	/**
+	 * Generates a Normal matrix from the given model matrix,
+	 * which is used to rotate the with the rotation defined by the model
+	 * while keeping them as normals. (Look up Normal matrices on google for more info)
+	 * @param model The input model matrix
+	 * @return
+	 */
 	public static Mat3 toNormalMatrix(Mat4 model) {
 		Mat4 mat = Mat4.transpose(Mat4.inverse(model));
-		Mat3 ret = new Mat3();
-		ret.m00 = mat.m00;
-		ret.m01 = mat.m01;
-		ret.m02 = mat.m02;
-		ret.m10 = mat.m10;
-		ret.m11 = mat.m11;
-		ret.m12 = mat.m12;
-		ret.m20 = mat.m20;
-		ret.m21 = mat.m21;
-		ret.m22 = mat.m22;
-		return ret;
+		float[] dest = new float[9];
+		dest[0] = mat.m00;
+		dest[1] = mat.m01;
+		dest[2] = mat.m02;
+		dest[3] = mat.m10;
+		dest[4] = mat.m11;
+		dest[5] = mat.m12;
+		dest[6] = mat.m20;
+		dest[7] = mat.m21;
+		dest[8] = mat.m23;
+		return new Mat3(dest);
 	}
 
 }

@@ -150,27 +150,26 @@ public class Quat {
 		float sqy = this.y * this.y;
 		float sqz = this.z * this.z;
 		
-		Mat4 mat = new Mat4();
-		mat.m00 = sqx - sqy -sqz + sqw;
-		mat.m11 = -sqx + sqy -sqz + sqw;
-		mat.m22 = -sqx - sqy + sqz + sqw;
+		float[] mat = new float[16];
+		mat[0] = sqx - sqy -sqz + sqw;
+		mat[5] = -sqx + sqy -sqz + sqw;
+		mat[10] = -sqx - sqy + sqz + sqw;
 		
 		float tmp1 = this.x * this.y;
 		float tmp2 = this.z * this.w;
-		mat.m10 = 2.0f * (tmp1 + tmp2);
-		mat.m01 = 2.0f * (tmp1 - tmp2);
+		mat[4] = 2.0f * (tmp1 + tmp2);
+		mat[1] = 2.0f * (tmp1 - tmp2);
 		
 		tmp1 = this.x * this.z;
 		tmp2 = this.y * this.w;
-		mat.m20 = 2.0f * (tmp1 - tmp2);
-		mat.m02 = 2.0f * (tmp1 + tmp2);
+		mat[8] = 2.0f * (tmp1 - tmp2);
+		mat[2] = 2.0f * (tmp1 + tmp2);
 		tmp1 = this.y * this.z;
 		tmp2 = this.x * this.w;
-		mat.m21 = 2.0f * (tmp1 + tmp2);
-		mat.m12 = 2.0f * (tmp1 - tmp2);
-		mat.m03 = mat.m13 = mat.m23 = mat.m30 = mat.m31 = mat.m32 = 0;
-		mat.m33 = 1;
-		return mat;
+		mat[9] = 2.0f * (tmp1 + tmp2);
+		mat[6] = 2.0f * (tmp1 - tmp2);
+		mat[15] = 1;
+		return new Mat4(mat);
 	}
 
 	public Quat normalize() {
