@@ -1,7 +1,9 @@
 package com.unknownloner.lonelib.graphics.buffers;
 
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
 
 import org.lwjgl.opengl.GL15;
 
@@ -11,44 +13,90 @@ public class VertexBufferObject {
 	
 	private final int vboID;
 	private final int target;
-	public final int elemLength;
-	public final int byteLength;
 	
-	public VertexBufferObject(int target, int usage, Buffer data) {
+	public VertexBufferObject(int target) {
 		vboID = GL15.glGenBuffers();
 		this.target = target;
-		this.elemLength = data.limit() - data.position();
-		this.byteLength = elemLength * BufferUtil.getElemByteSize(data);
+	}
+	
+	public VertexBufferObject(int target, int usage, ByteBuffer data) {
+		vboID = GL15.glGenBuffers();
+		this.target = target;
 		bufferData(data, usage);
 	}
 	
-	public VertexBufferObject(int target, int usage, Object dataArray) {
+	public VertexBufferObject(int target, int usage, ShortBuffer data) {
 		vboID = GL15.glGenBuffers();
 		this.target = target;
-		Buffer data = BufferUtil.wrap(dataArray);
-		this.elemLength = data.limit() - data.position();
-		this.byteLength = elemLength * BufferUtil.getElemByteSize(data);
 		bufferData(data, usage);
 	}
 	
-	public void bufferData(Buffer data, int usage) {
-		ByteBuffer buffer = BufferUtil.asByteBuffer(data);
-		int oldPos = buffer.position();
-		int oldLim = buffer.limit();
-		BufferUtil.copyPosAndLimit(data, buffer);
-		GL15.glBindBuffer(target, vboID);
-		GL15.glBufferData(target, buffer, usage);
-		buffer.position(oldPos).limit(oldLim);
+	public VertexBufferObject(int target, int usage, IntBuffer data) {
+		vboID = GL15.glGenBuffers();
+		this.target = target;
+		bufferData(data, usage);
 	}
 	
-	public void bufferSubData(Buffer data, int offset) {
-		ByteBuffer buffer = BufferUtil.asByteBuffer(data);
-		int oldPos = buffer.position();
-		int oldLim = buffer.limit();
-		BufferUtil.copyPosAndLimit(data, buffer);
+	public VertexBufferObject(int target, int usage, FloatBuffer data) {
+		vboID = GL15.glGenBuffers();
+		this.target = target;
+		bufferData(data, usage);
+	}
+	
+	public VertexBufferObject(int target, int usage, byte[] data) {
+		this(target, usage, BufferUtil.wrap(data));
+	}
+	
+	public VertexBufferObject(int target, int usage, short[] data) {
+		this(target, usage, BufferUtil.wrap(data));
+	}
+	
+	public VertexBufferObject(int target, int usage, int[] data) {
+		this(target, usage, BufferUtil.wrap(data));
+	}
+	
+	public VertexBufferObject(int target, int usage, float[] data) {
+		this(target, usage, BufferUtil.wrap(data));
+	}
+	
+	public void bufferData(ByteBuffer data, int usage) {
 		GL15.glBindBuffer(target, vboID);
-		GL15.glBufferSubData(target, offset, buffer);
-		buffer.position(oldPos).limit(oldLim);
+		GL15.glBufferData(target, data, usage);
+	}
+	
+	public void bufferData(ShortBuffer data, int usage) {
+		GL15.glBindBuffer(target, vboID);
+		GL15.glBufferData(target, data, usage);
+	}
+	
+	public void bufferData(IntBuffer data, int usage) {
+		GL15.glBindBuffer(target, vboID);
+		GL15.glBufferData(target, data, usage);
+	}
+	
+	public void bufferData(FloatBuffer data, int usage) {
+		GL15.glBindBuffer(target, vboID);
+		GL15.glBufferData(target, data, usage);
+	}
+	
+	public void bufferSubData(ByteBuffer data, int offset) {
+		GL15.glBindBuffer(target, vboID);
+		GL15.glBufferSubData(target, offset, data);
+	}
+	
+	public void bufferSubData(ShortBuffer data, int offset) {
+		GL15.glBindBuffer(target, vboID);
+		GL15.glBufferSubData(target, offset, data);
+	}
+	
+	public void bufferSubData(IntBuffer data, int offset) {
+		GL15.glBindBuffer(target, vboID);
+		GL15.glBufferSubData(target, offset, data);
+	}
+	
+	public void bufferSubData(FloatBuffer data, int offset) {
+		GL15.glBindBuffer(target, vboID);
+		GL15.glBufferSubData(target, offset, data);
 	}
 	
 	public void assign() {
