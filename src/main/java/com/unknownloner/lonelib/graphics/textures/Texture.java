@@ -20,14 +20,16 @@ public class Texture {
 	public final int texID = GL11.glGenTextures();
 	private boolean smoothScale;
 	private boolean clamp;
+	private boolean mipmap;
 	
 	/**
 	 * Creates a texture based on the image's data
 	 * @param srcImage An image to load
 	 */
-	public Texture(BufferedImage srcImage, boolean smoothScale, boolean clamp) {
+	public Texture(BufferedImage srcImage, boolean smoothScale, boolean clamp, boolean mipmap) {
 		this.smoothScale = smoothScale;
 		this.clamp = clamp;
+		this.mipmap = mipmap;
 		int width = srcImage.getWidth();
 		int height = srcImage.getHeight();
 		int[] data = new int[width * height];
@@ -47,8 +49,8 @@ public class Texture {
 	 * Loads an image from imgPath and uses it to create a texture
 	 * @param imgPath The path to an image, in jar or out of jar
 	 */
-	public Texture(String imgPath, boolean smoothScale, boolean clamp) {
-		this(ImageUtil.loadImg(imgPath), smoothScale, clamp);
+	public Texture(String imgPath, boolean smoothScale, boolean clamp, boolean mipmap) {
+		this(ImageUtil.loadImg(imgPath), smoothScale, clamp, mipmap);
 	}
 	
 	
@@ -126,7 +128,9 @@ public class Texture {
 		}
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texID);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, (smoothScale ? GL11.GL_LINEAR : GL11.GL_NEAREST));
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, (smoothScale ? GL11.GL_LINEAR_MIPMAP_LINEAR : GL11.GL_NEAREST_MIPMAP_LINEAR));
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, (smoothScale ? 
+				(mipmap ? GL11.GL_LINEAR_MIPMAP_LINEAR : GL11.GL_LINEAR) :
+				(mipmap ? GL11.GL_NEAREST_MIPMAP_LINEAR : GL11.GL_NEAREST)));
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, (clamp ? GL11.GL_CLAMP : GL11.GL_REPEAT));
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, (clamp ? GL11.GL_CLAMP : GL11.GL_REPEAT));
 		if(!GLContext.getCapabilities().OpenGL30)
