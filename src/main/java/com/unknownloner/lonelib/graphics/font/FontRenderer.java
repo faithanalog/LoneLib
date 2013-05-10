@@ -100,16 +100,29 @@ public class FontRenderer {
 			recurseLevel--;
 			return;
 		}
+		float x = startPos.getX();
+		float y = startPos.getY();
+		float z = startPos.getZ();
+		float r = color.getX();
+		float g = color.getY();
+		float b = color.getZ();
+		float a = color.getW();
 		char[] textChars = text.toCharArray();
 		dataBuffer.clear();
 		for(char c : textChars) {
-			float x = (c % 16) / 16F;
-			float y = (c / 16) / 16F;
+			float tX = (c % 16) / 16F;
+			float tY = (c / 16) / 16F;
 			dataBuffer.put(new float[] {
-					
+					x,            y,            z, r, g, b, a, tX,           tY,
+					x,            y + charSize, z, r, g, b, a, tX,           tY + 0.0625F,
+					x + charSize, y + charSize, z, r, g, b, a, tX + 0.0625F, tY + 0.0625F,
+					x + charSize, y,            z, r, g, b, a, tX + 0.0625F, tY,
 			});
+			x += charSize;
 		}
-		
+		dataBuffer.flip();
+		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, dataBuffer, GL15.GL_STREAM_DRAW);
+		GL11.glDrawElements(GL11.GL_TRIANGLES, textChars.length * 6, GL11.GL_UNSIGNED_SHORT, 0);
 	}
 	
 	public float stringWidth(String text, float charSize) {
