@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
@@ -16,18 +17,20 @@ import com.unknownloner.lonelib.graphics.buffers.VertexBufferObject;
 import com.unknownloner.lonelib.graphics.shaders.ShaderProgram;
 import com.unknownloner.lonelib.graphics.textures.Texture;
 import com.unknownloner.lonelib.math.Vec3;
+import com.unknownloner.lonelib.math.Vec4;
 import com.unknownloner.lonelib.util.BufferUtil;
 import com.unknownloner.lonelib.util.MathUtil;
 
 public class FontRenderer {
 	
 	
-	public static ShaderProgram shaderProgram = new ShaderProgram("/shaders/FontShader.vert", "/shaders/FontShader.frag");
+	public static ShaderProgram globalFontProgram = new ShaderProgram("/shaders/FontShader.vert", "/shaders/FontShader.frag");
 	private Texture fontTexture;
+	private ShaderProgram shaderProgram = globalFontProgram;
 	private boolean[] displayable = new boolean[256];
 	private float[] widths = new float[256];
 	private float[] texWidths = new float[256];
-	private FloatBuffer dataBuffer = BufferUtil.createFloatBuffer(128 * 4);
+	private FloatBuffer dataBuffer = BufferUtil.createFloatBuffer(128 * 9);
 	private VertexBufferObject data = new VertexBufferObject(GL15.GL_ARRAY_BUFFER);
 	private VertexBufferObject inds = new VertexBufferObject(GL15.GL_ELEMENT_ARRAY_BUFFER);
 	private VertexArrayObject vao = new VertexArrayObject(
@@ -61,10 +64,27 @@ public class FontRenderer {
 		}
 		g.dispose();
 		fontTexture = new Texture(img, false, true);
+		
+		inds.assign();
+		ShortBuffer indBuf = BufferUtil.createShortBuffer(128 * 4);
+		for(short i = 0; i < 128 * 4; i++) {
+			indBuf.put(i);
+		}
+		inds.bufferData(indBuf, GL15.GL_STATIC_DRAW);
+	}
+	
+	public void setShaderProgram(ShaderProgram prgm, int posAttrib, int colorAttrib, int texCoordAttrib) {
+		this.shaderProgram = prgm;
+		vao.delete();
+		vao = new VertexArrayObject(
+				new VertexAttribPointer(data, posAttrib,      3, GL11.GL_FLOAT, false, 9 * 4, 0),     //Position
+				new VertexAttribPointer(data, colorAttrib,    4, GL11.GL_FLOAT, false, 9 * 4, 3 * 4), //Color
+				new VertexAttribPointer(data, texCoordAttrib, 2, GL11.GL_FLOAT, false, 9 * 4, 7 * 4)  //Tex Coords
+		);
 	}
 	
 	private int recurseLevel = 0;
-	public void drawString(String text, Vec3 startPos, float charSize) {
+	public void drawString(String text, Vec3 startPos, Vec4 color, float charSize) {
 		if(recurseLevel == 0) {
 			fontTexture.assign(0);
 			shaderProgram.assign();
@@ -75,11 +95,20 @@ public class FontRenderer {
 			recurseLevel++;
 			String str1 = text.substring(0, 128);
 			String str2 = text.substring(128);
-			drawString(str1, startPos, charSize);
-			drawString(str2, new Vec3(startPos.getX() + stringWidth(str1, charSize), startPos.getY(), startPos.getZ()), charSize);
+			drawString(str1, startPos, color, charSize);
+			drawString(str2, new Vec3(startPos.getX() + stringWidth(str1, charSize), startPos.getY(), startPos.getZ()), color, charSize);
 			recurseLevel--;
+			return;
 		}
-		
+		char[] textChars = text.toCharArray();
+		dataBuffer.clear();
+		for(char c : textChars) {
+			float x = (c % 16) / 16F;
+			float y = (c / 16) / 16F;
+			dataBuffer.put(new float[] {
+					
+			});
+		}
 		
 	}
 	

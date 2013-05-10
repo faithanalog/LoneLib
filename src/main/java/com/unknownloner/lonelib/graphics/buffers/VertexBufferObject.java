@@ -11,7 +11,7 @@ import com.unknownloner.lonelib.util.BufferUtil;
 
 public class VertexBufferObject {
 	
-	private final int vboID;
+	public final int vboID;
 	private final int target;
 	
 	public VertexBufferObject(int target) {
@@ -101,6 +101,10 @@ public class VertexBufferObject {
 	
 	public void assign() {
 		GL15.glBindBuffer(target, vboID);
+	}
+	
+	public void delete() {
+		GL15.glDeleteBuffers(vboID);
 	}
 
 }

@@ -17,7 +17,7 @@ import com.unknownloner.lonelib.util.ImageUtil;
 
 public class Texture {
 	
-	private int texID = GL11.glGenTextures();
+	public final int texID = GL11.glGenTextures();
 	private boolean smoothScale;
 	private boolean clamp;
 	
@@ -161,6 +161,14 @@ public class Texture {
 	public void assign(int textureUnit) {
 		GL13.glActiveTexture(textureUnit);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texID);
+	}
+	
+	public void assign() {
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texID);
+	}
+	
+	public void delete() {
+		GL11.glDeleteTextures(texID);
 	}
 	
 	

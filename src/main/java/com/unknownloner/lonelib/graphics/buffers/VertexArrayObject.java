@@ -7,8 +7,8 @@ import org.lwjgl.opengl.GLContext;
 public class VertexArrayObject {
 	
 	private VertexAttribPointer[] pointers;
-	private int vaoID;
-	private static boolean vaoSupport;
+	public final int vaoID;
+	public static boolean vaoSupport;
 	
 	static {
 		vaoSupport = GLContext.getCapabilities().GL_ARB_vertex_array_object;
@@ -24,6 +24,7 @@ public class VertexArrayObject {
 			GL30.glBindVertexArray(0);
 		} else {
 			this.pointers = pointers;
+			vaoID = -1;
 		}
 	}
 	
@@ -50,6 +51,14 @@ public class VertexArrayObject {
 			for(VertexAttribPointer pointer : pointers) {
 				GL20.glDisableVertexAttribArray(pointer.getAttribIndex());
 			}
+		}
+	}
+	
+	public void delete() {
+		if(vaoSupport) {
+			GL30.glDeleteVertexArrays(vaoID);
+		} else {
+			pointers = new VertexAttribPointer[0];
 		}
 	}
 
