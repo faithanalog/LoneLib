@@ -30,6 +30,25 @@ public class FontRenderer {
 	
 	public static ShaderProgram globalFontProgram = new ShaderProgram("/shaders/FontShader.vert", "/shaders/FontShader.frag");
 	private static boolean mapBufferRange = GLContext.getCapabilities().GL_ARB_map_buffer_range;
+	private static VertexBufferObject data = new VertexBufferObject(GL15.GL_ARRAY_BUFFER, GL15.GL_STREAM_DRAW, 128 * 9 * 4 * 4);
+	private static VertexBufferObject inds = new VertexBufferObject(GL15.GL_ELEMENT_ARRAY_BUFFER, GL15.GL_STATIC_DRAW, 128 * 6 * 2);
+	static {
+		inds.assign();
+		ShortBuffer indBuf = BufferUtil.createShortBuffer(128 * 6);
+		for(short i = 0; i < 128 * 4; i += 4) {
+			short[] ind = new short[] {
+					i,
+					(short)(i + 1),
+					(short)(i + 2),
+					(short)(i + 2),
+					(short)(i + 3),
+					i
+			};
+			indBuf.put(ind);
+		}
+		indBuf.flip();
+		inds.bufferSubData(indBuf, 0);
+	}
 	
 	private Texture fontTexture;
 	private ShaderProgram shaderProgram = globalFontProgram;
@@ -38,8 +57,6 @@ public class FontRenderer {
 	private float[] texWidths = new float[256];
 	private float texHeight;
 	private float sizeOverPt;
-	private VertexBufferObject data = new VertexBufferObject(GL15.GL_ARRAY_BUFFER, GL15.GL_STREAM_DRAW, 128 * 9 * 4 * 4);
-	private VertexBufferObject inds = new VertexBufferObject(GL15.GL_ELEMENT_ARRAY_BUFFER, GL15.GL_STATIC_DRAW, 128 * 6 * 2);
 	private VertexArrayObject vao = new VertexArrayObject(
 			new VertexAttribPointer(data, 0, 3, GL11.GL_FLOAT, false, 9 * 4, 0),     //Position
 			new VertexAttribPointer(data, 1, 4, GL11.GL_FLOAT, false, 9 * 4, 3 * 4), //Color
@@ -73,22 +90,6 @@ public class FontRenderer {
 		}
 		g.dispose();
 		fontTexture = new Texture(img, true, true, false);
-		
-		inds.assign();
-		ShortBuffer indBuf = BufferUtil.createShortBuffer(128 * 6);
-		for(short i = 0; i < 128 * 4; i += 4) {
-			short[] ind = new short[] {
-					i,
-					(short)(i + 1),
-					(short)(i + 2),
-					(short)(i + 2),
-					(short)(i + 3),
-					i
-			};
-			indBuf.put(ind);
-		}
-		indBuf.flip();
-		inds.bufferSubData(indBuf, 0);
 	}
 	
 	public void setShaderProgram(ShaderProgram prgm, int posAttrib, int colorAttrib, int texCoordAttrib) {
