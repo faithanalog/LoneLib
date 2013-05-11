@@ -38,8 +38,8 @@ public class FontRenderer {
 	private float[] texWidths = new float[256];
 	private float texHeight;
 	private float sizeOverPt;
-	private VertexBufferObject data = new VertexBufferObject(GL15.GL_ARRAY_BUFFER);
-	private VertexBufferObject inds = new VertexBufferObject(GL15.GL_ELEMENT_ARRAY_BUFFER);
+	private VertexBufferObject data = new VertexBufferObject(GL15.GL_ARRAY_BUFFER, GL15.GL_STREAM_DRAW, 128 * 9 * 4 * 4);
+	private VertexBufferObject inds = new VertexBufferObject(GL15.GL_ELEMENT_ARRAY_BUFFER, GL15.GL_STATIC_DRAW, 128 * 6 * 2);
 	private VertexArrayObject vao = new VertexArrayObject(
 			new VertexAttribPointer(data, 0, 3, GL11.GL_FLOAT, false, 9 * 4, 0),     //Position
 			new VertexAttribPointer(data, 1, 4, GL11.GL_FLOAT, false, 9 * 4, 3 * 4), //Color
@@ -88,9 +88,7 @@ public class FontRenderer {
 			indBuf.put(ind);
 		}
 		indBuf.flip();
-		inds.bufferData(indBuf, GL15.GL_STATIC_DRAW);
-		data.assign();
-		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, 128 * 9 * 4 * 4, GL15.GL_STREAM_DRAW);
+		inds.bufferSubData(indBuf, 0);
 	}
 	
 	public void setShaderProgram(ShaderProgram prgm, int posAttrib, int colorAttrib, int texCoordAttrib) {
@@ -113,6 +111,7 @@ public class FontRenderer {
 		fontTexture.assign(GL13.GL_TEXTURE0);
 		shaderProgram.assign();
 		vao.assign();
+		data.assign();
 		inds.assign();
 		int strPos = 0;
 		char[] textChars = text.toCharArray();

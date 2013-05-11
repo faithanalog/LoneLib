@@ -14,9 +14,10 @@ public class VertexBufferObject {
 	public final int vboID;
 	private final int target;
 	
-	public VertexBufferObject(int target) {
+	public VertexBufferObject(int target, int usage, int dataSize) {
 		vboID = GL15.glGenBuffers();
 		this.target = target;
+		bufferData(dataSize, usage);
 	}
 	
 	public VertexBufferObject(int target, int usage, ByteBuffer data) {
@@ -77,6 +78,11 @@ public class VertexBufferObject {
 	public void bufferData(FloatBuffer data, int usage) {
 		GL15.glBindBuffer(target, vboID);
 		GL15.glBufferData(target, data, usage);
+	}
+	
+	public void bufferData(int dataSize, int usage) {
+		GL15.glBindBuffer(target, vboID);
+		GL15.glBufferData(target, dataSize, usage);
 	}
 	
 	public void bufferSubData(ByteBuffer data, int offset) {

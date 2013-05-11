@@ -133,10 +133,10 @@ public class Texture {
 				(mipmap ? GL11.GL_NEAREST_MIPMAP_LINEAR : GL11.GL_NEAREST)));
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, (clamp ? GL11.GL_CLAMP : GL11.GL_REPEAT));
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, (clamp ? GL11.GL_CLAMP : GL11.GL_REPEAT));
-		if(!GLContext.getCapabilities().OpenGL30)
+		if(!GLContext.getCapabilities().OpenGL30 && mipmap)
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL14.GL_GENERATE_MIPMAP, GL11.GL_TRUE);
 		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, bytes);
-		if(GLContext.getCapabilities().OpenGL30)
+		if(GLContext.getCapabilities().OpenGL30 && mipmap)
 			GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
 	}
 	
