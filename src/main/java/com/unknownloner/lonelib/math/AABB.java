@@ -59,34 +59,6 @@ public class AABB {
 		return new Vec3(maxx, maxy, maxz);
 	}
 	
-	/**
-	 * Expands the AABB's bounds by amnt. Negative values will not shrink the bounds,
-	 * just expand it in a negative direction
-	 * @param amnt The amount to expand the AABB in the x, y, and z direction.
-	 * @return
-	 */
-	public AABB add(Vec3 amnt) {
-		float nMinx = minx;
-		float nMiny = miny;
-		float nMinz = minz;
-		float nMaxx = maxx;
-		float nMaxy = maxy;
-		float nMaxz = maxz;
-		if(amnt.x < 0)
-			nMinx += amnt.x;
-		else
-			nMaxx += amnt.x;
-		if(amnt.y < 0)
-			nMiny += amnt.y;
-		else
-			nMaxy += amnt.y;
-		if(amnt.z < 0)
-			nMinz += amnt.z;
-		else
-			nMaxz += amnt.z;
-		return new AABB(nMinx, nMiny, nMinz, nMaxx, nMaxy, nMaxz);
-	}
-	
 	public float getXSize() {
 		return maxx - minx;
 	}
@@ -177,5 +149,140 @@ public class AABB {
 			return null;
 		return pos.add(new Vec3(dir.x * dists.y, dir.y * dists.y, dir.z * dists.y));
 	}
+	
+	public boolean contains(Vec3 pos) {
+		return pos.x > this.minx && pos.x < this.maxx
+				&& pos.y > this.miny && pos.y < this.maxy
+				&& pos.z > this.minz && pos.z < this.maxz;
+	}
+	
+	/**
+	 * Expands the AABB's bounds by amnt. Negative values will not shrink the bounds,
+	 * just expand it in a negative direction
+	 * @param amnt The amount to expand the AABB in the x, y, and z direction.
+	 * @return A new AABB expanded by amnt
+	 */
+	public AABB add(Vec3 amnt) {
+		float nMinx = minx;
+		float nMiny = miny;
+		float nMinz = minz;
+		float nMaxx = maxx;
+		float nMaxy = maxy;
+		float nMaxz = maxz;
+		if(amnt.x < 0)
+			nMinx += amnt.x;
+		else
+			nMaxx += amnt.x;
+		if(amnt.y < 0)
+			nMiny += amnt.y;
+		else
+			nMaxy += amnt.y;
+		if(amnt.z < 0)
+			nMinz += amnt.z;
+		else
+			nMaxz += amnt.z;
+		return new AABB(nMinx, nMiny, nMinz, nMaxx, nMaxy, nMaxz);
+	}
+	
+	/**
+	 * Moves the bounds by amnt
+	 * @param amnt The amount to offset the AABB by
+	 * @return A new AABB offset from the original by amnt
+	 */
+	public AABB offset(Vec3 amnt) {
+		return new AABB(minx + amnt.x, miny + amnt.y, minz + amnt.z, maxx + amnt.x, maxy + amnt.y, maxz + amnt.z);
+	}
+	
+	/**
+	 * Keeps the bounds dimensions but changes it's position to center
+	 * @param pos The new center point
+	 * @return A new AABB of the same dimensions but a center of pos
+	 */
+	public AABB setCenter(Vec3 pos) {
+		float x = getXSize() / 2F;
+		float y = getYSize() / 2F;
+		float z = getZSize() / 2F;
+		return new AABB(pos.x - x, pos.y - y, pos.z - z, pos.x + x, pos.y + y, pos.z + z);
+	}
+	
+	/**
+	 * Calculates the x distance between the edges of this bound and another.
+	 * @param bounds The other bounding box
+	 * @param curOff A current distance. If the new offset is further from 0
+	 * than curOff, curOff will be returned.
+	 * @return
+	 */
+	public float calcXOffset(AABB bounds, float curOff) {
+		if(bounds.maxy > this.miny && bounds.miny < this.maxy && bounds.maxz > this.minz && bounds.minz < this.maxz) {
+			float newOff;
+			if(curOff > 0 && bounds.maxx <= this.minx) {
+				newOff = this.minx - bounds.maxx;
+				if(newOff < curOff) {
+					curOff = newOff;
+				}
+			}
+			if(curOff < 0 && bounds.minx >= this.maxx) {
+				newOff = this.maxx - bounds.minx;
+				if(newOff > curOff) {
+					curOff = newOff;
+				}
+			}
+		}
+		return curOff;
+	};
+	
+	
+	/**
+	 * Calculates the y distance between the edges of this bound and another.
+	 * @param bounds The other bounding box
+	 * @param curOff A current distance. If the new offset is further from 0
+	 * than curOff, curOff will be returned.
+	 * @return
+	 */
+	public float calcYOffset(AABB bounds, float curOff) {
+		if(bounds.maxx > this.minx && bounds.minx < this.maxx && bounds.maxz > this.minz && bounds.minz < this.maxz) {
+			float newOff;
+			if(curOff > 0 && bounds.maxy <= this.miny) {
+				newOff = this.miny - bounds.maxy;
+				if(newOff < curOff) {
+					curOff = newOff;
+				}
+			}
+			if(curOff < 0 && bounds.miny >= this.maxy) {
+				newOff = this.maxy - bounds.miny;
+				if(newOff > curOff) {
+					curOff = newOff;
+				}
+			}
+		}
+		return curOff;
+	}
+	
+	/**
+	 * Calculates the z distance between the edges of this bound and another.
+	 * @param bounds The other bounding box
+	 * @param curOff A current distance. If the new offset is further from 0
+	 * than curOff, curOff will be returned.
+	 * @return
+	 */
+	public float calcZOffset(AABB bounds, float curOff) {
+		if(bounds.maxy > this.miny && bounds.miny < this.maxy && bounds.maxx > this.minx && bounds.minx < this.maxx) {
+			float newOff;
+			if(curOff > 0 && bounds.maxz <= this.minz) {
+				newOff = this.minz - bounds.maxz;
+				if(newOff < curOff) {
+					curOff = newOff;
+				}
+			}
+			if(curOff < 0 && bounds.minz >= this.maxz) {
+				newOff = this.maxz - bounds.minz;
+				if(newOff > curOff) {
+					curOff = newOff;
+				}
+			}
+			
+		}
+		return curOff;
+	};
 
 }
