@@ -38,5 +38,59 @@ public class MathUtil {
 	    v++;
 	    return v;
 	}
+	
+	public static int min(int... vals) {
+		int min = vals[0];
+		for(int i = 1; i < vals.length; i++) {
+			if(vals[i] < min)
+				min = vals[i];
+		}
+		return min;
+	}
+	
+	public static int max(int... vals) {
+		int max = vals[0];
+		for(int i = 1; i < vals.length; i++) {
+			if(vals[i] > max)
+				max = vals[i];
+		}
+		return max;
+	}
+	
+	public static float min(float... vals) {
+		float min = vals[0];
+		for(int i = 1; i < vals.length; i++) {
+			if(vals[i] < min)
+				min = vals[i];
+		}
+		return min;
+	}
+	
+	public static float max(float... vals) {
+		float max = vals[0];
+		for(int i = 1; i < vals.length; i++) {
+			if(vals[i] > max)
+				max = vals[i];
+		}
+		return max;
+	}
+	
+	public static double min(double... vals) {
+		double min = vals[0];
+		for(int i = 1; i < vals.length; i++) {
+			if(vals[i] < min)
+				min = vals[i];
+		}
+		return min;
+	}
+	
+	public static double max(double... vals) {
+		double max = vals[0];
+		for(int i = 1; i < vals.length; i++) {
+			if(vals[i] > max)
+				max = vals[i];
+		}
+		return max;
+	}
 
 }

@@ -1,5 +1,7 @@
 package com.unknownloner.lonelib.math;
 
+import com.unknownloner.lonelib.util.MathUtil;
+
 public class AABB {
 	
 	protected final float minx;
@@ -101,9 +103,9 @@ public class AABB {
 		
 		float tz1 = (this.minz - pos.z) / dir.z;
 		float tz2 = (this.maxz - pos.z) / dir.z;
-
-		float tmin = Math.max(Math.min(tx1, tx2), Math.max(Math.min(ty1, ty2), Math.min(tz1, tz2)));
-		float tmax = Math.min(Math.max(tx1, tx2), Math.min(Math.max(ty1, ty2), Math.max(tz1, tz2)));
+		
+		float tmin = MathUtil.max(Math.min(tx1, tx2), Math.min(ty1, ty2), Math.min(tz1, tz2));
+		float tmax = MathUtil.min(Math.max(tx1, tx2), Math.max(ty1, ty2), Math.max(tz1, tz2));
 		if(tmax >= tmin) {
 			return new Vec2(tmin, tmax);
 		} else {
