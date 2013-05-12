@@ -104,7 +104,6 @@ public class AABB {
 
 		float tmin = Math.max(Math.min(tx1, tx2), Math.max(Math.min(ty1, ty2), Math.min(tz1, tz2)));
 		float tmax = Math.min(Math.max(tx1, tx2), Math.min(Math.max(ty1, ty2), Math.max(tz1, tz2)));
-		// if(tmax >= Math.max(0, tmin) && tmin < (1 / 0)) {
 		if(tmax >= tmin) {
 			return new Vec2(tmin, tmax);
 		} else {
