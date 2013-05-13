@@ -68,10 +68,13 @@ public class FontRenderer {
 		sizeOverPt = size / font.getSize2D();
 		int cellSize = MathUtil.nextPowerOfTwo(size);
 		BufferedImage img = new BufferedImage(cellSize * 16, cellSize * 16, BufferedImage.TYPE_INT_ARGB);
+		for(int x = 0; x < img.getWidth(); x++) {
+			for(int y = 0; y < img.getHeight(); y++) {
+				img.setRGB(x, y, 0x00FFFFFF);
+			}
+		}
 		texHeight = size / (float)img.getHeight();
 		Graphics2D g = img.createGraphics();
-		g.setColor(new Color(255, 255, 255, 0));
-		g.fillRect(0, 0, img.getWidth(), img.getHeight());
 		g.setColor(new Color(255, 255, 255, 255));
 		g.setFont(font);
 		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
