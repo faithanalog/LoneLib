@@ -27,21 +27,22 @@ import com.unknownloner.lonelib.math.Vec4;
 
 public class ShaderProgram {
 	
-	public final int program;
+	// openGL ID of the Shader Program
+	public final int programId;
 	
 	private static Map<String, Integer> varMap = new HashMap<String, Integer>(0x100);
 	private List<ShaderUniform> uniformUpdates = new ArrayList<ShaderUniform>(0x100);
 	private boolean relinkProgram = false;
 	
 	public ShaderProgram(String vertShader, String fragShader) {
-		program = GL20.glCreateProgram();
-		GL20.glAttachShader(program, ShaderLoader.loadShader(vertShader, GL20.GL_VERTEX_SHADER));
-		GL20.glAttachShader(program, ShaderLoader.loadShader(fragShader, GL20.GL_FRAGMENT_SHADER));
-		GL20.glLinkProgram(program);
+		programId = GL20.glCreateProgram();
+		GL20.glAttachShader(programId, ShaderLoader.loadShader(vertShader, GL20.GL_VERTEX_SHADER));
+		GL20.glAttachShader(programId, ShaderLoader.loadShader(fragShader, GL20.GL_FRAGMENT_SHADER));
+		GL20.glLinkProgram(programId);
 	}
 	
 	public void bindAttribLoc(int location, CharSequence varName) {
-		GL20.glBindAttribLocation(program, location, varName);
+		GL20.glBindAttribLocation(programId, location, varName);
 		varMap.put(varName.toString(), location);
 		relinkProgram = true;
 	}
@@ -53,7 +54,7 @@ public class ShaderProgram {
 	public int getUniformLoc(String name) {
 		Integer location = varMap.get(name);
 		if(location == null) {
-			location = GL20.glGetUniformLocation(program, name);
+			location = GL20.glGetUniformLocation(programId, name);
 			varMap.put(name, location);
 		}
 		return location;
@@ -96,9 +97,9 @@ public class ShaderProgram {
 	}
 	
 	public void assign() {
-		GL20.glUseProgram(program);
+		GL20.glUseProgram(programId);
 		if(relinkProgram) {
-			GL20.glLinkProgram(program);
+			GL20.glLinkProgram(programId);
 			relinkProgram = false;
 		}
 		for(ShaderUniform uniform : uniformUpdates)
@@ -111,7 +112,4 @@ public class ShaderProgram {
 			uniform.assign();
 		uniformUpdates.clear();
 	}
-	
-	
-
 }
