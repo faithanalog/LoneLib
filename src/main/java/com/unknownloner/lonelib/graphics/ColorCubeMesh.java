@@ -1,5 +1,6 @@
 package com.unknownloner.lonelib.graphics;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -15,7 +16,7 @@ import com.unknownloner.lonelib.math.Vec3;
 /**
  * Represents a Mesh for use with a shader program that uses vertices(3), color data(4), and normals(3) as floats.
  */
-public class ColorMesh {
+public class ColorCubeMesh {
 
 	private final Vec3 position;
 	private final VertexBufferObject vertBuffer;
@@ -24,15 +25,15 @@ public class ColorMesh {
 
 	private final FloatBuffer verts;
 	private final IntBuffer indices;
-	private short index = 0; 
-	private short numIndices = 0;
+	private int index = 0; 
+	private int numIndices = 0;
 
 	/**
 	 * Construct a mesh for use at the given world position, with the number of maximum faces
 	 * @param position
 	 * @param faces
 	 */
-	public ColorMesh(Vec3 position, int numTriangles) {
+	public ColorCubeMesh(Vec3 position, int numTriangles) {
 		this.position = position;
 		vertBuffer = new VertexBufferObject(GL15.GL_ARRAY_BUFFER, GL15.GL_STATIC_DRAW, 0);
 		indexBuffer = new VertexBufferObject(GL15.GL_ELEMENT_ARRAY_BUFFER, GL15.GL_STATIC_DRAW, 0);
@@ -41,7 +42,7 @@ public class ColorMesh {
 				new VertexAttribPointer(vertBuffer, 1, 4, GL11.GL_FLOAT, false, (3 + 4 + 3) * 4, 3 * 4), // color data
 				new VertexAttribPointer(vertBuffer, 2, 3, GL11.GL_FLOAT, false, (3 + 4 + 3) * 4, (3 + 4) * 4) // normals
 				);
-		verts = BufferUtils.createFloatBuffer(numTriangles * 3 * (3 + 4 + 3)); // 3 vertices per Tri * numFloats used
+		verts = BufferUtils.createFloatBuffer(numTriangles * 10); // 10 floats per face (3 verts, 4 colors, 3 normals
 		indices = BufferUtils.createIntBuffer(numTriangles * 3); // 3 indices per tri
 	}
 
@@ -58,22 +59,13 @@ public class ColorMesh {
 	 * @param normZ
 	 * @return
 	 */
-	public short addVertex(Vec3 point, float r, float g, float b, float a, float normX, float normY, float normZ) {
-		verts.put(point.getX())
-		.put(point.getY())
-		.put(point.getZ())
-		.put(r)
-		.put(g)
-		.put(b)
-		.put(a)
-		.put(normX)
-		.put(normY)
-		.put(normZ);
+	public int addVertex(Vec3 point, float r, float g, float b, float a, float normX, float normY, float normZ) {
+		verts.put(new float[] {point.getX(), point.getY(), point.getZ(), r, g, b, a, normX, normY, normZ});
 		return index++;
 	}
 
-	public void addTriangle(short p1, short p2, short p3) {
-		indices.put(p1).put(p2).put(p3);
+	public void addTriangle(int p1, int p2, int p3) {
+		indices.put(new int[] {p1, p2, p3});
 		numIndices += 3;
 	}
 
@@ -105,7 +97,7 @@ public class ColorMesh {
 		GL11.glDrawElements(GL11.GL_TRIANGLES, numIndices, GL11.GL_UNSIGNED_INT, 0);
 		vertArray.unassign();
 	}
-	
+
 	public void delete() {
 		vertBuffer.delete();
 		indexBuffer.delete();
