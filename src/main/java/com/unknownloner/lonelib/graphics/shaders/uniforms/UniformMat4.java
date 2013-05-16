@@ -24,5 +24,4 @@ public class UniformMat4 extends ShaderUniform {
 		dataBuffer.flip();
 		GL20.glUniformMatrix4(location, false, dataBuffer);
 	}
-
 }

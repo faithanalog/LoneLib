@@ -46,7 +46,7 @@ public class VertexArrayObject {
 	
 	public void unassign() {
 		if(vaoSupport) {
-			GL30.glBindVertexArray(0);
+			GL30.glBindVertexArray(0);  // with GL30 you should never need to disable VAOs, just enable the next necessary one.
 		} else {
 			for(VertexAttribPointer pointer : pointers) {
 				GL20.glDisableVertexAttribArray(pointer.getAttribIndex());
@@ -61,5 +61,4 @@ public class VertexArrayObject {
 			pointers = new VertexAttribPointer[0];
 		}
 	}
-
 }
