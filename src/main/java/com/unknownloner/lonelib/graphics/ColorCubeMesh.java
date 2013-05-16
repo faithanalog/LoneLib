@@ -1,6 +1,5 @@
 package com.unknownloner.lonelib.graphics;
 
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -16,7 +15,7 @@ import com.unknownloner.lonelib.math.Vec3;
 /**
  * Represents a Mesh for use with a shader program that uses vertices(3), color data(4), and normals(3) as floats.
  */
-public class ColorCubeMesh {
+public class ColorCubeMesh implements Mesh {
 
 	private final Vec3 position;
 	private final VertexBufferObject vertBuffer;
@@ -27,6 +26,8 @@ public class ColorCubeMesh {
 	private final IntBuffer indices;
 	private int index = 0; 
 	private int numIndices = 0;
+	
+	public static final short BYTES_PER_TRI = 40; // 4 bytes per * 10 floats
 
 	/**
 	 * Construct a mesh for use at the given world position, with the number of maximum faces
@@ -38,9 +39,9 @@ public class ColorCubeMesh {
 		vertBuffer = new VertexBufferObject(GL15.GL_ARRAY_BUFFER, GL15.GL_STATIC_DRAW, 0);
 		indexBuffer = new VertexBufferObject(GL15.GL_ELEMENT_ARRAY_BUFFER, GL15.GL_STATIC_DRAW, 0);
 		vertArray = new VertexArrayObject(
-				new VertexAttribPointer(vertBuffer, 0, 3, GL11.GL_FLOAT, false, (3 + 4 + 3) * 4, 0), // vertices
-				new VertexAttribPointer(vertBuffer, 1, 4, GL11.GL_FLOAT, false, (3 + 4 + 3) * 4, 3 * 4), // color data
-				new VertexAttribPointer(vertBuffer, 2, 3, GL11.GL_FLOAT, false, (3 + 4 + 3) * 4, (3 + 4) * 4) // normals
+				new VertexAttribPointer(vertBuffer, 0, 3, GL11.GL_FLOAT, false, BYTES_PER_TRI, 0), // vertices
+				new VertexAttribPointer(vertBuffer, 1, 4, GL11.GL_FLOAT, false, BYTES_PER_TRI, 3 * 4), // color data
+				new VertexAttribPointer(vertBuffer, 2, 3, GL11.GL_FLOAT, false, BYTES_PER_TRI, (3 + 4) * 4) // normals
 				);
 		verts = BufferUtils.createFloatBuffer(numTriangles * 10); // 10 floats per face (3 verts, 4 colors, 3 normals
 		indices = BufferUtils.createIntBuffer(numTriangles * 3); // 3 indices per tri
@@ -69,10 +70,7 @@ public class ColorCubeMesh {
 		numIndices += 3;
 	}
 
-
-	/**
-	 * Readies this mesh for use with the GPU
-	 */
+	@Override
 	public void finalize() {
 		verts.flip();
 		indices.flip();
@@ -80,14 +78,13 @@ public class ColorCubeMesh {
 		indexBuffer.bufferData(indices, GL15.GL_STATIC_DRAW);
 	}
 
-	/**
-	 * Resets the vertex and index buffers for re-generating the mesh
-	 */
+	@Override
 	public void reset() {
 		verts.clear();
 		indices.clear();
 	}
 
+	@Override
 	public void render() {
 		// render the mesh
 		// Assumes that the proper shaderProgram is already active
@@ -98,6 +95,7 @@ public class ColorCubeMesh {
 		vertArray.unassign();
 	}
 
+	@Override
 	public void delete() {
 		vertBuffer.delete();
 		indexBuffer.delete();

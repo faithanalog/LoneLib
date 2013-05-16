@@ -30,8 +30,8 @@ public class ShaderProgram {
 	// openGL ID of the Shader Program
 	public final int programId;
 	
-	private static Map<String, Integer> varMap = new HashMap<String, Integer>(0x100);
-	private List<ShaderUniform> uniformUpdates = new ArrayList<ShaderUniform>(0x100);
+	private static Map<String, Integer> varMap = new HashMap<String, Integer>(0x10);
+	private List<ShaderUniform> uniformUpdates = new ArrayList<ShaderUniform>(0x10);
 	private boolean relinkProgram = false;
 	
 	public ShaderProgram(String vertShader, String fragShader) {
