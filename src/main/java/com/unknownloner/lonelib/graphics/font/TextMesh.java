@@ -32,15 +32,15 @@ public class TextMesh implements Mesh {
 	private Vec3 pos;
 	private Vec4 color;
 	
-	public TextMesh(FontRenderer fr, float textSize, Vec3 bottomLeft, Vec4 color) {
+	public TextMesh(FontRenderer fr, float textSize, Vec3 topLeft, Vec4 color) {
 		this.fr = fr;
 		this.textSize = textSize;
-		this.pos = bottomLeft;
+		this.pos = topLeft.sub(new Vec3(0, textSize, 0));
 		this.color = color;
 	}
 	
-	public TextMesh(FontRenderer fr, float textSize, Vec3 bottomLeft, Vec4 color, String initialText) {
-		this(fr, textSize, bottomLeft, color);
+	public TextMesh(FontRenderer fr, float textSize, Vec3 topLeft, Vec4 color, String initialText) {
+		this(fr, textSize, topLeft, color);
 		addLine(initialText);
 	}
 	
@@ -84,16 +84,19 @@ public class TextMesh implements Mesh {
 		short ind = 0;
 		for(String line : lines) {
 			fr.addString(verts, line, x, y, z, r, g, b, a, textSize, true);
-			inds.put(new short[] {
-					ind,
-					(short)(ind + 1),
-					(short)(ind + 2),
-					(short)(ind + 2),
-					(short)(ind + 3),
-					ind
-			});
-			y += textSize;
-			ind += 4;
+			for(int i = 0; i < line.length(); i++) {
+				inds.put(new short[] {
+						ind,
+						(short)(ind + 1),
+						(short)(ind + 2),
+						(short)(ind + 2),
+						(short)(ind + 3),
+						ind
+				});
+				ind += 4;
+			}
+			y -= textSize;
+			
 		}
 		GL15.glUnmapBuffer(GL15.GL_ARRAY_BUFFER);
 		GL15.glUnmapBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER);
