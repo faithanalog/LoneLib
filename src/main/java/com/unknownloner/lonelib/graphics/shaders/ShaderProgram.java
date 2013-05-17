@@ -46,6 +46,15 @@ public class ShaderProgram {
 		GL20.glLinkProgram(programId);
 	}
 	
+	public ShaderProgram(List<String> attributes, String vertShader, String fragShader) {
+		this(vertShader, fragShader);
+		// Loop over the attributes used for this shader and bind them
+		int i = 0;
+		for (String name : attributes) {
+			this.bindAttribLoc(i++, name);
+		}
+	}
+	
 	public void bindAttribLoc(int location, CharSequence varName) {
 		GL20.glBindAttribLocation(programId, location, varName);
 		varMap.put(varName.toString(), location);

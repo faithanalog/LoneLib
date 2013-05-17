@@ -20,7 +20,7 @@ public class ColorCubeMesh implements Mesh {
 	private final Vec3 position;
 	private final VertexBufferObject vertBuffer;
 	private final VertexBufferObject indexBuffer;
-	private final VertexArrayObject vertArray;
+	private final VertexArrayObject vao;
 
 	private final FloatBuffer verts;
 	private final IntBuffer indices;
@@ -30,15 +30,15 @@ public class ColorCubeMesh implements Mesh {
 	public static final short BYTES_PER_TRI = 40; // 4 bytes per * 10 floats
 
 	/**
-	 * Construct a mesh for use at the given world position, with the number of maximum faces
+	 * Construct a mesh for use at the given world position, with the number of maximum triangles
 	 * @param position
-	 * @param faces
+	 * @param max triangles to render
 	 */
 	public ColorCubeMesh(Vec3 position, int numTriangles) {
 		this.position = position;
 		vertBuffer = new VertexBufferObject(GL15.GL_ARRAY_BUFFER, GL15.GL_STATIC_DRAW, 0);
 		indexBuffer = new VertexBufferObject(GL15.GL_ELEMENT_ARRAY_BUFFER, GL15.GL_STATIC_DRAW, 0);
-		vertArray = new VertexArrayObject(
+		vao = new VertexArrayObject(
 				new VertexAttribPointer(vertBuffer, 0, 3, GL11.GL_FLOAT, false, BYTES_PER_TRI, 0), // vertices
 				new VertexAttribPointer(vertBuffer, 1, 4, GL11.GL_FLOAT, false, BYTES_PER_TRI, 3 * 4), // color data
 				new VertexAttribPointer(vertBuffer, 2, 3, GL11.GL_FLOAT, false, BYTES_PER_TRI, (3 + 4) * 4) // normals
@@ -82,6 +82,7 @@ public class ColorCubeMesh implements Mesh {
 	public void reset() {
 		verts.clear();
 		indices.clear();
+		index = 0;
 	}
 
 	@Override
@@ -89,16 +90,26 @@ public class ColorCubeMesh implements Mesh {
 		// render the mesh
 		// Assumes that the proper shaderProgram is already active
 		//TODO: translate to the position necessary for rendering
-		vertArray.assign();
+		vao.assign();
 		indexBuffer.assign();
 		GL11.glDrawElements(GL11.GL_TRIANGLES, numIndices, GL11.GL_UNSIGNED_INT, 0);
-		vertArray.unassign();
+		if(!VertexArrayObject.vaoSupport) {
+			vao.unassign();
+		}
 	}
 
 	@Override
 	public void delete() {
 		vertBuffer.delete();
 		indexBuffer.delete();
-		vertArray.delete();
+		vao.delete();
+	}
+	
+	/**
+	 * Get this meshes position
+	 * @return position
+	 */
+	public Vec3 getPosition() {
+		return position;
 	}
 }
