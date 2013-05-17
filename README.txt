@@ -1,6 +1,18 @@
 This is a library for use with OpenGL and Java, specifically LWJGL
 Feel free to fork and optimize/add anything you think may be useful, pull requets to add new features are welcome
 
+To build to a jar:
+Install maven: http://maven.apache.org/
+Open command prompt/terminal
+Navigate to the root directory of LoneLib (which contains pom.xml)
+type the following:
+
+mvn clean install
+
+And it will put a Jar called LoneLib-1.0-SNAPSHOT.jar in a few folder called target
+
+------------------------------------------------------------
+
 Guidelines for usage: (Will be moved to wiki possibly later)
 1. Generally avoid making referrences to any classes in LoneLib before creating a GL context (Display.create()).
 This is because some classes (such as FontRenderer) execute code which requires a GL context to exist
