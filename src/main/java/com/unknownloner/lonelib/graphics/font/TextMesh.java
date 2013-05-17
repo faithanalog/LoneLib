@@ -32,6 +32,13 @@ public class TextMesh implements Mesh {
 	private Vec3 pos;
 	private Vec4 color;
 	
+	/**
+	 * Creates a TextMesh which will use the given FontRenderer to generate vertices
+	 * @param fr FontRenderer used to gen vertices. the FontRenderer's shader is <b>NOT</b> assigned by {@link #render()}
+	 * @param textSize Point size of text
+	 * @param topLeft Top left corner of the text mesh
+	 * @param color Color of the text mesh
+	 */
 	public TextMesh(FontRenderer fr, float textSize, Vec3 topLeft, Vec4 color) {
 		this.fr = fr;
 		this.textSize = textSize;
@@ -39,11 +46,30 @@ public class TextMesh implements Mesh {
 		this.color = color;
 	}
 	
-	public TextMesh(FontRenderer fr, float textSize, Vec3 topLeft, Vec4 color, String initialText) {
+	/**
+	 * Creates a TextMesh which will use the given FontRenderer to generate vertices, initialized with provided
+	 * lines of text
+	 * @param fr FontRenderer used to gen vertices. the FontRenderer's shader is <b>NOT</b> assigned by {@link #render()}
+	 * @param textSize Point size of text
+	 * @param topLeft Top left corner of the text mesh
+	 * @param color Color of the text mesh
+	 * @param initialText Initial lines of text in the mesh
+	 */
+	public TextMesh(FontRenderer fr, float textSize, Vec3 topLeft, Vec4 color, String... initialText) {
 		this(fr, textSize, topLeft, color);
-		addLine(initialText);
+		if(initialText != null) {
+			for(String str : initialText) {
+				addLine(str);
+			}
+		}
 	}
 	
+	/**
+	 * Adds a line of text to the mesh.
+	 * <br>The line will appear under all the preceding lines
+	 * @param line Line to add
+	 * @return The line's index in the list of lines. Use with {@link #removeLine(int)}
+	 */
 	public int addLine(String line) {
 		StringBuilder filteredLine = new StringBuilder();
 		for(char c : line.toCharArray()) {
@@ -58,12 +84,23 @@ public class TextMesh implements Mesh {
 		return lines.size() - 1;
 	}
 	
+	/**
+	 * Removes the line of text at index from the mesh
+	 * @param index Index of line to remove. The index will have been
+	 * returned by {@link #addLine(String)}
+	 */
 	public void removeLine(int index) {
 		String removal = lines.remove(index);
 		vertCount -= removal.length() * 4;
 		indCount -= removal.length() * 6;
 	}
 	
+	/**
+	 * Returns underlying list of the lines of text in this mesh.
+	 * <br>Changes in this list will be reflected in the mesh after the next
+	 * invocation of {@link #finalizeMesh()}
+	 * @return The underlying list of the lines of text in this mesh.
+	 */
 	public List<String> getLines() {
 		return lines;
 	}

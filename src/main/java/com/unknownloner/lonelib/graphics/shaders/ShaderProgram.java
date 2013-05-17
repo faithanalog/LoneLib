@@ -33,11 +33,16 @@ public class ShaderProgram {
 	private static Map<String, Integer> varMap = new HashMap<String, Integer>(0x10);
 	private List<ShaderUniform> uniformUpdates = new ArrayList<ShaderUniform>(0x10);
 	private boolean relinkProgram = false;
+	private boolean deleted = false;
+	private int vertShader;
+	private int fragShader;
 	
 	public ShaderProgram(String vertShader, String fragShader) {
 		programId = GL20.glCreateProgram();
-		GL20.glAttachShader(programId, ShaderLoader.loadShader(vertShader, GL20.GL_VERTEX_SHADER));
-		GL20.glAttachShader(programId, ShaderLoader.loadShader(fragShader, GL20.GL_FRAGMENT_SHADER));
+		this.vertShader = ShaderLoader.loadShader(vertShader, GL20.GL_VERTEX_SHADER);
+		this.fragShader = ShaderLoader.loadShader(fragShader, GL20.GL_FRAGMENT_SHADER);
+		GL20.glAttachShader(programId, this.vertShader);
+		GL20.glAttachShader(programId, this.fragShader);
 		GL20.glLinkProgram(programId);
 	}
 	
@@ -111,5 +116,19 @@ public class ShaderProgram {
 		for(ShaderUniform uniform : uniformUpdates)
 			uniform.assign();
 		uniformUpdates.clear();
+	}
+	
+	public void delete() {
+		if(!deleted) {
+			deleted = true;
+			GL20.glDeleteProgram(programId);
+			GL20.glDeleteShader(vertShader);
+			GL20.glDeleteShader(fragShader);
+		}
+	}
+	
+	@Override
+	protected void finalize() {
+		delete();
 	}
 }

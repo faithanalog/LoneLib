@@ -109,6 +109,13 @@ public class FontRenderer {
 		return this.shaderProgram;
 	}
 	
+	/**
+	 * Draws a string at the given position
+	 * @param text Text to draw
+	 * @param startPos Bottom left hand corner to start at. String will increment x as it renders
+	 * @param color Color of the string
+	 * @param charSize Point size of text to draw
+	 */
 	public void drawString(String text, Vec3 startPos, Vec4 color, float charSize) {
 		//Adjust to be accurate to the original font's point value
 		charSize *= sizeOverPt;
@@ -144,7 +151,7 @@ public class FontRenderer {
 			int charsToDisplay = 0;
 			for(int i = strPos, max = (remaining < 128 ? textChars.length : strPos + 128); i < max; i++) {
 				char c = textChars[i];
-				if(displayable[c]) {
+				if(canDisplay(c)) {
 					charsToDisplay++;
 					float tX = (c % 16) / 16F;
 					float tY = (c / 16) / 16F;
@@ -168,27 +175,57 @@ public class FontRenderer {
 		} while(strPos < textChars.length);
 	}
 	
+	/**
+	 * Sames as {@link #drawString(String, Vec3, Vec4, float)}, but centered on startPos
+	 */
 	public void drawCenteredString(String text, Vec3 startPos, Vec4 color, float charSize) {
 		drawString(text, new Vec3(startPos.getX() - stringWidth(text, charSize) / 2F, startPos.getY(), startPos.getZ()), color, charSize);
 	}
 	
+	/**
+	 * Returns the width of text based on the point size
+	 * @param text Text to measure
+	 * @param charSize Point size of text
+	 * @return
+	 */
 	public float stringWidth(String text, float charSize) {
 		//Adjust to be accurate to the original font's point value
 		charSize *= sizeOverPt;
 		char[] textChars = text.toCharArray();
 		float width = 0;
 		for(char c : textChars) {
-			width += widths[c] * charSize;
+			if(canDisplay(c)) {
+				width += widths[c] * charSize;
+			}
 		}
 		return width;
 	}
 	
+	/**
+	 * Whether or not this FontRenderer can display the character
+	 * @param c character to check
+	 * @return whether or not c can be displayed by the FontRenderer
+	 */
 	public boolean canDisplay(char c) {
-		return displayable[c];
+		return c < 256 && displayable[c];
 	}
 	
+	/**
+	 * Adds vertex data for a character to dest
+	 * @param dest FloatBuffer to put data in
+	 * @param c Character to draw
+	 * @param x X position of char
+	 * @param y Y position of char
+	 * @param z Z position of char
+	 * @param r Red color channel of char
+	 * @param g Green color channel of char
+	 * @param b Blue color channel of char
+	 * @param a Alpha color channel of char
+	 * @param charSize Character point size
+	 * @return
+	 */
 	private boolean addChar(FloatBuffer dest, char c, float x, float y, float z, float r, float g, float b, float a, float charSize) {
-		if(displayable[c]) {
+		if(canDisplay(c)) {
 			float tX = (c % 16) / 16F;
 			float tY = (c / 16) / 16F;
 			float width = widths[c] * charSize;
@@ -204,6 +241,20 @@ public class FontRenderer {
 		}
 	}
 	
+	/**
+	 * Adds vertex data for a String to dest
+	 * @param dest FloatBuffer to put data in
+	 * @param c Character to draw
+	 * @param x X position of string
+	 * @param y Y position of string
+	 * @param z Z position of string
+	 * @param r Red color channel of string
+	 * @param g Green color channel of string
+	 * @param b Blue color channel of string
+	 * @param a Alpha color channel of string
+	 * @param charSize Character point size
+	 * @return
+	 */
 	public void addString(FloatBuffer dest, String str, float x, float y, float z, float r, float g, float b, float a, float charSize, boolean colorText) {
 		//TODO add use for colorText (Color coding)
 		charSize *= sizeOverPt;
