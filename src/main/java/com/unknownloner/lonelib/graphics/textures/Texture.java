@@ -21,6 +21,7 @@ public class Texture {
 	private boolean smoothScale;
 	private boolean clamp;
 	private boolean mipmap;
+	private boolean deleted;
 	
 	/**
 	 * Creates a texture based on the image's data
@@ -172,7 +173,15 @@ public class Texture {
 	}
 	
 	public void delete() {
-		GL11.glDeleteTextures(texID);
+		if(!deleted) {
+			deleted = true;
+			GL11.glDeleteTextures(texID);
+		}
+	}
+	
+	@Override
+	protected void finalize() {
+		delete();
 	}
 	
 	

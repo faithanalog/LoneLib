@@ -9,6 +9,7 @@ public class VertexArrayObject {
 	private VertexAttribPointer[] pointers;
 	public final int vaoID;
 	public static boolean vaoSupport;
+	private boolean deleted;
 	
 	static {
 		vaoSupport = GLContext.getCapabilities().GL_ARB_vertex_array_object;
@@ -55,10 +56,18 @@ public class VertexArrayObject {
 	}
 	
 	public void delete() {
-		if(vaoSupport) {
-			GL30.glDeleteVertexArrays(vaoID);
-		} else {
-			pointers = new VertexAttribPointer[0];
+		if(!deleted) {
+			deleted = true;
+			if(vaoSupport) {
+				GL30.glDeleteVertexArrays(vaoID);
+			} else {
+				pointers = null;
+			}
 		}
+	}
+	
+	@Override
+	protected void finalize() {
+		delete();
 	}
 }

@@ -13,6 +13,7 @@ public class VertexBufferObject {
 	
 	public final int vboID;
 	private final int target;
+	private boolean deleted;
 	
 	public VertexBufferObject(int target, int usage, int dataSize) {
 		vboID = GL15.glGenBuffers();
@@ -110,7 +111,15 @@ public class VertexBufferObject {
 	}
 	
 	public void delete() {
-		GL15.glDeleteBuffers(vboID);
+		if(!deleted) {
+			deleted = true;
+			GL15.glDeleteBuffers(vboID);
+		}
+	}
+	
+	@Override
+	protected void finalize() {
+		delete();
 	}
 
 }

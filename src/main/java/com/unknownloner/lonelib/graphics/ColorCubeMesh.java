@@ -71,7 +71,7 @@ public class ColorCubeMesh implements Mesh {
 	}
 
 	@Override
-	public void finalize() {
+	public void finalizeMesh() {
 		verts.flip();
 		indices.flip();
 		vertBuffer.bufferData(verts, GL15.GL_STATIC_DRAW);

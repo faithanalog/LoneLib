@@ -20,5 +20,5 @@ public interface Mesh {
 	/**
 	 * Readies this mesh for use with the GPU
 	 */
-	public void finalize();
+	public void finalizeMesh();
 }

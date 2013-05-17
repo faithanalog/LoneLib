@@ -182,5 +182,37 @@ public class FontRenderer {
 		}
 		return width;
 	}
+	
+	public boolean canDisplay(char c) {
+		return displayable[c];
+	}
+	
+	private boolean addChar(FloatBuffer dest, char c, float x, float y, float z, float r, float g, float b, float a, float charSize) {
+		if(displayable[c]) {
+			float tX = (c % 16) / 16F;
+			float tY = (c / 16) / 16F;
+			float width = widths[c] * charSize;
+			dest.put(new float[] {
+					x,            y + charSize, z, r, g, b, a, tX,                tY,
+					x,            y,            z, r, g, b, a, tX,                tY + texHeight,
+					x + width,    y,            z, r, g, b, a, tX + texWidths[c], tY + texHeight,
+					x + width,    y + charSize, z, r, g, b, a, tX + texWidths[c], tY,
+			});
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public void addString(FloatBuffer dest, String str, float x, float y, float z, float r, float g, float b, float a, float charSize, boolean colorText) {
+		//TODO add use for colorText (Color coding)
+		charSize *= sizeOverPt;
+		for(int i = 0; i < str.length(); i++) {
+			char c = str.charAt(i);
+			if(addChar(dest, c, x, y, z, r, g, b, a, charSize)) {
+				x += widths[c] * charSize;
+			}
+		}
+	}
 
 }
