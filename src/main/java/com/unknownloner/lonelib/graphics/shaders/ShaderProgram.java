@@ -53,7 +53,12 @@ public class ShaderProgram {
 	}
 	
 	public int getAttribLoc(String name) {
-		return varMap.get(name);
+		Integer location = varMap.get(name);
+		if(location == null) {
+			location = GL20.glGetAttribLocation(programId, name);
+			varMap.put(name, location);
+		}
+		return location;
 	}
 	
 	public int getUniformLoc(String name) {
