@@ -126,9 +126,6 @@ public class ColorCubeMesh implements Mesh {
         GL11.glEnable(GL31.GL_PRIMITIVE_RESTART);
         GL31.glPrimitiveRestartIndex(RESET_INDEX);
         GL11.glDrawElements(GL11.GL_TRIANGLE_STRIP, numIndices, GL11.GL_UNSIGNED_INT, 0);
-        if(!VertexArrayObject.vaoSupport) {
-            vao.unassign();
-        }
     }
 
     @Override

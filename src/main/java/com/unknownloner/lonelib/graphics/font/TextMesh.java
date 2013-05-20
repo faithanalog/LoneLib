@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL30;
 
 import com.unknownloner.lonelib.graphics.Mesh;
 import com.unknownloner.lonelib.graphics.buffers.VertexArrayObject;
@@ -107,10 +108,14 @@ public class TextMesh implements Mesh {
 	
 	@Override
 	public void finalizeMesh() {
-		vertBuffer.bufferData(vertCount * 9 * 4 /*9 floats per vert*/, GL15.GL_STATIC_DRAW);
-		indBuffer.bufferData(indCount * 2 /* shorts */, GL15.GL_STATIC_DRAW);
-		FloatBuffer verts = GL15.glMapBuffer(GL15.GL_ARRAY_BUFFER, GL15.GL_WRITE_ONLY, vertCount * 9 * 4, null).asFloatBuffer();
-		ShortBuffer inds = GL15.glMapBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, GL15.GL_WRITE_ONLY, indCount * 2, null).asShortBuffer();
+		int vertByteAmnt = vertCount * 9 * 4; /*9 floats per vert*/
+		int indByteAmnt = indCount * 2; /* shorts */
+		vertBuffer.bufferData(vertByteAmnt, GL15.GL_STATIC_DRAW);
+		indBuffer.bufferData(indByteAmnt, GL15.GL_STATIC_DRAW);
+		FloatBuffer verts = GL30.glMapBufferRange(GL15.GL_ARRAY_BUFFER, 0, vertByteAmnt,
+				GL30.GL_MAP_WRITE_BIT | GL30.GL_MAP_UNSYNCHRONIZED_BIT, null).asFloatBuffer();
+		ShortBuffer inds = GL30.glMapBufferRange(GL15.GL_ELEMENT_ARRAY_BUFFER, 0, indByteAmnt,
+				GL30.GL_MAP_WRITE_BIT | GL30.GL_MAP_UNSYNCHRONIZED_BIT, null).asShortBuffer();
 		float x = pos.getX();
 		float y = pos.getY();
 		float z = pos.getZ();
@@ -144,9 +149,6 @@ public class TextMesh implements Mesh {
 		vao.assign();
 		indBuffer.assign();
 		GL11.glDrawElements(GL11.GL_TRIANGLES, indCount, GL11.GL_UNSIGNED_SHORT, 0);
-		if(!VertexArrayObject.vaoSupport) {
-			vao.unassign();
-		}
 	}
 
 	@Override

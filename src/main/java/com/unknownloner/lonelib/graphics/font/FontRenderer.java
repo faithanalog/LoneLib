@@ -12,7 +12,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GLContext;
 
 import com.unknownloner.lonelib.graphics.buffers.VertexArrayObject;
 import com.unknownloner.lonelib.graphics.buffers.VertexAttribPointer;
@@ -29,7 +28,6 @@ public class FontRenderer {
 	
 	
 	public static ShaderProgram globalFontProgram = new ShaderProgram("/shaders/FontShader.vert", "/shaders/FontShader.frag");
-	private static boolean mapBufferRange = GLContext.getCapabilities().GL_ARB_map_buffer_range;
 	private static VertexBufferObject data = new VertexBufferObject(GL15.GL_ARRAY_BUFFER, GL15.GL_STREAM_DRAW, 128 * 9 * 4 * 4);
 	private static VertexBufferObject inds = new VertexBufferObject(GL15.GL_ELEMENT_ARRAY_BUFFER, GL15.GL_STATIC_DRAW, 128 * 6 * 2);
 	static {
@@ -140,14 +138,9 @@ public class FontRenderer {
 			
 			//Gets a ByteBuffer as a float buffer, the byte buffer being a java wrapper to a C pointer. This basically
 			//creates a memory map of the entire text rendering VBO, which will map directly to the GPU when it can
-			//GL_MAP_UNSYCNHRONIZED_BIT is used when availible because it speeds up the process
-			FloatBuffer dataBuffer;
-			if(mapBufferRange) {
-				dataBuffer = GL30.glMapBufferRange(GL15.GL_ARRAY_BUFFER, 0, bytesToMap,
-						GL30.GL_MAP_WRITE_BIT | GL30.GL_MAP_UNSYNCHRONIZED_BIT, null).asFloatBuffer();
-			} else {
-				dataBuffer = GL15.glMapBuffer(GL15.GL_ARRAY_BUFFER, GL15.GL_WRITE_ONLY, bytesToMap, null).asFloatBuffer();
-			}
+			//GL_MAP_UNSYCNHRONIZED_BIT is used because it speeds up the process
+			FloatBuffer dataBuffer = GL30.glMapBufferRange(GL15.GL_ARRAY_BUFFER, 0, bytesToMap,
+					GL30.GL_MAP_WRITE_BIT | GL30.GL_MAP_UNSYNCHRONIZED_BIT, null).asFloatBuffer();
 			int charsToDisplay = 0;
 			for(int i = strPos, max = (remaining < 128 ? textChars.length : strPos + 128); i < max; i++) {
 				char c = textChars[i];
