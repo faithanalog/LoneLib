@@ -64,7 +64,7 @@ public class GLUtil {
 	}
 	
 	/**
-	 * Takes a screenshot of the back buffer
+	 * Takes a screenshot
 	 * @param x Left x value of capture area
 	 * @param y Lower y value of capture area (0 = bottom)
 	 * @param width Width of capture area
