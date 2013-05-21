@@ -53,7 +53,7 @@ public class ColorCubeMesh implements Mesh {
         vao = new VertexArrayObject(
                 new VertexAttribPointer(vertBuffer, 0, 3, GL11.GL_FLOAT, false, BYTES_PER_VERT, 0), // 3 floats per vertex
                 new VertexAttribPointer(vertBuffer, 1, 3, GL11.GL_FLOAT, false, BYTES_PER_VERT, (3 * 4)), // 3 normals per vertex
-                new VertexAttribPointer(vertBuffer, 2, 1, GL11.GL_INT, false, BYTES_PER_VERT, (3 + 3) * 4) // 1 packed int for color data
+                new VertexAttribPointer(vertBuffer, 2, 1, GL11.GL_UNSIGNED_INT, false, BYTES_PER_VERT, (3 + 3) * 4) // 1 packed int for color data
         );
         ByteBuffer buffer = BufferUtils.createByteBuffer(maxCubes * BYTES_PER_CUBE);
         verts = buffer.asFloatBuffer();
@@ -135,10 +135,7 @@ public class ColorCubeMesh implements Mesh {
         vao.delete();
     }
 
-    /**
-     * Get this meshes position
-     * @return position
-     */
+    @Override
     public Vec3 getPosition() {
         return position;
     }
