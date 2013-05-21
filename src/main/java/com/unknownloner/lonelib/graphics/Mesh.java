@@ -1,5 +1,7 @@
 package com.unknownloner.lonelib.graphics;
 
+import com.unknownloner.lonelib.math.Vec3;
+
 public interface Mesh {
 
 	/**
@@ -21,4 +23,9 @@ public interface Mesh {
 	 * Readies this mesh for use with the GPU
 	 */
 	public void finalizeMesh();
+
+    /**
+     * @return world position of this mesh
+     */
+    public Vec3 getPosition();
 }

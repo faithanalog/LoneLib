@@ -164,4 +164,8 @@ public class TextMesh implements Mesh {
 		indBuffer.bufferData(0, GL15.GL_STATIC_DRAW);
 	}
 
+    @Override
+    public Vec3 getPosition() {
+        return null;
+    }
 }
