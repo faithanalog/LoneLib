@@ -108,6 +108,10 @@ public class FontRenderer {
 		return this.shaderProgram;
 	}
 	
+	public void bindFontTexture(int textureUnit) {
+		fontTexture.assign(textureUnit);
+	}
+	
 	/**
 	 * Draws a string at the given position
 	 * @param text Text to draw
@@ -260,8 +264,8 @@ public class FontRenderer {
 		}
 	}
 	
-	public MeshBatch createMeshBatch(String modelLoc, TextMesh... meshes) {
-		MeshBatch batch = new MeshBatch(getShaderProgram(), modelLoc, new Vec3(1, 1, 1));
+	public TextMeshBatch createMeshBatch(String modelLoc, TextMesh... meshes) {
+		TextMeshBatch batch = new TextMeshBatch(this, modelLoc);
 		if(meshes != null) {
 			batch.addMeshes(meshes);
 		}
