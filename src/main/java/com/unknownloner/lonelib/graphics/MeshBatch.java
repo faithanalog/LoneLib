@@ -1,5 +1,7 @@
 package com.unknownloner.lonelib.graphics;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -48,6 +50,38 @@ public class MeshBatch {
      */
     public void removeMesh(Mesh mesh) {
         displayList.remove(mesh);
+    }
+    
+    /**
+     * Adds an array of meshes to the display set.
+     * @param meshes
+     */
+    public void addMeshes(Mesh[] meshes) {
+    	displayList.addAll(Arrays.asList(meshes)); /* Arrays.asList is O(1) */
+    }
+    
+    /**
+     * Removes an array of meshses to the display set.
+     * @param meshses
+     */
+    public void removeMeshes(Mesh[] meshes) {
+    	displayList.removeAll(Arrays.asList(meshes));
+    }
+    
+    /**
+     * Adds a collection of meshes to the display set.
+     * @param meshes
+     */
+    public void addMeshses(Collection<Mesh> meshes) {
+    	displayList.addAll(meshes);
+    }
+    
+    /**
+     * Removes a collection of meshes to the display set.
+     * @param meshes
+     */
+    public void removeMeshses(Collection<Mesh> meshes) {
+    	displayList.retainAll(meshes);
     }
 
     /**

@@ -558,5 +558,54 @@ public class Mat4 {
 		float right = top * aspectRatio;
 		return frustrum(-right, right, -top, top, near, far);
 	}
+	
+	public static Mat4 makeTranslation(Vec3 dist) {
+		float[] dest = new float[16];
+		dest[0] = dest[5] = dest[10] = dest[15] = 1F;
+		dest[12] = dist.x;
+		dest[13] = dist.y;
+		dest[14] = dist.z;
+		return new Mat4(dest);
+	}
+	
+	public static Mat4 makeRotation(float radians, Vec3 axis) {
+		float[] dest = new float[16];
+		axis = axis.normalize();
+		float sin = (float)Math.sin(radians);
+		float cos = (float)Math.cos(radians);
+		float oneMinusCos = 1F - cos;
+		float xx = axis.x * axis.x;
+		float xy = axis.x * axis.y;
+		float xz = axis.x * axis.z;
+
+		float yy = axis.y * axis.y;
+		float yz = axis.y * axis.z;
+
+		float zz = axis.z * axis.z;
+
+		dest[0] = xx + (1 - xx) * cos;
+		dest[1] = xy * oneMinusCos + axis.z * sin;
+		dest[2] = xz * oneMinusCos - axis.y * sin;
+
+		dest[4] = xy * oneMinusCos - axis.z * sin;
+		dest[5] = yy + (1 - yy) * cos;
+		dest[6] = yz * oneMinusCos + axis.x * sin;
+
+		dest[8] = xz * oneMinusCos + axis.y * sin;
+		dest[9] = yz * oneMinusCos - axis.x * sin;
+		dest[10] = zz + (1 - zz) * cos;
+		
+		dest[15] = 1;
+		return new Mat4(dest);
+	}
+	
+	public static Mat4 makeScale(Vec3 scale) {
+		float[] dest = new float[16];
+		dest[0] = scale.x;
+		dest[5] = scale.y;
+		dest[10] = scale.z;
+		dest[15] = 1;
+		return new Mat4(dest);
+	}
 
 }

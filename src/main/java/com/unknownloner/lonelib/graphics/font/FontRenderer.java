@@ -13,6 +13,7 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
 
+import com.unknownloner.lonelib.graphics.MeshBatch;
 import com.unknownloner.lonelib.graphics.buffers.VertexArrayObject;
 import com.unknownloner.lonelib.graphics.buffers.VertexAttribPointer;
 import com.unknownloner.lonelib.graphics.buffers.VertexBufferObject;
@@ -257,6 +258,14 @@ public class FontRenderer {
 				x += widths[c] * charSize;
 			}
 		}
+	}
+	
+	public MeshBatch createMeshBatch(String modelLoc, TextMesh... meshes) {
+		MeshBatch batch = new MeshBatch(getShaderProgram(), modelLoc, new Vec3(1, 1, 1));
+		if(meshes != null) {
+			batch.addMeshes(meshes);
+		}
+		return batch;
 	}
 
 }

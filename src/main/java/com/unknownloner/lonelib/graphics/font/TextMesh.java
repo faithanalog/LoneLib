@@ -43,8 +43,8 @@ public class TextMesh implements Mesh {
 	public TextMesh(FontRenderer fr, float textSize, Vec3 topLeft, Vec4 color) {
 		this.fr = fr;
 		this.textSize = textSize;
-		this.pos = topLeft.sub(new Vec3(0, textSize, 0));
 		this.color = color;
+		setPosition(topLeft);
 	}
 	
 	/**
@@ -116,9 +116,12 @@ public class TextMesh implements Mesh {
 				GL30.GL_MAP_WRITE_BIT | GL30.GL_MAP_UNSYNCHRONIZED_BIT, null).asFloatBuffer();
 		ShortBuffer inds = GL30.glMapBufferRange(GL15.GL_ELEMENT_ARRAY_BUFFER, 0, indByteAmnt,
 				GL30.GL_MAP_WRITE_BIT | GL30.GL_MAP_UNSYNCHRONIZED_BIT, null).asShortBuffer();
-		float x = pos.getX();
-		float y = pos.getY();
-		float z = pos.getZ();
+//		float x = pos.getX();
+//		float y = pos.getY();
+//		float z = pos.getZ();
+		float x = 0;
+		float y = 0;
+		float z = 0;
 		float r = color.getX();
 		float g = color.getY();
 		float b = color.getZ();
@@ -166,6 +169,14 @@ public class TextMesh implements Mesh {
 
     @Override
     public Vec3 getPosition() {
-        return null;
+        return pos;
+    }
+    
+    /**
+     * Sets the top left corner of the TextMesh
+     * @param pos
+     */
+    public void setPosition(Vec3 topLeft) {
+    	this.pos = topLeft.sub(new Vec3(0, textSize, 0));
     }
 }

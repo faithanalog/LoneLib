@@ -7,6 +7,7 @@ import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 
@@ -130,8 +131,8 @@ public class Texture {
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, (smoothScale ? 
 				(mipmap ? GL11.GL_LINEAR_MIPMAP_LINEAR : GL11.GL_LINEAR) :
 				(mipmap ? GL11.GL_NEAREST_MIPMAP_LINEAR : GL11.GL_NEAREST)));
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, (clamp ? GL11.GL_CLAMP : GL11.GL_REPEAT));
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, (clamp ? GL11.GL_CLAMP : GL11.GL_REPEAT));
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, (clamp ? GL12.GL_CLAMP_TO_EDGE : GL11.GL_REPEAT));
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, (clamp ? GL12.GL_CLAMP_TO_EDGE : GL11.GL_REPEAT));
 		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, bytes);
 		if(mipmap) {
 			GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
