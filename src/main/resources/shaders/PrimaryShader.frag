@@ -13,4 +13,7 @@ void main(void) {
 	} else {
 		outColor = color;
 	}
+	if(outColor.a == 0.0) {
+		discard;
+	}
 }
