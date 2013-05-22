@@ -13,7 +13,6 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
 
-import com.unknownloner.lonelib.graphics.MeshBatch;
 import com.unknownloner.lonelib.graphics.buffers.VertexArrayObject;
 import com.unknownloner.lonelib.graphics.buffers.VertexAttribPointer;
 import com.unknownloner.lonelib.graphics.buffers.VertexBufferObject;

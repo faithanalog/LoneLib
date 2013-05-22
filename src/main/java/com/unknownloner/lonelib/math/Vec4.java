@@ -81,6 +81,17 @@ public class Vec4 {
 		return w;
 	}
 	
+	/**
+	 * Converts to a packed RGBA int value
+	 * <br>X = r
+	 * <br>Y = g
+	 * <br>Z = b
+	 * <br>W = A
+	 */
+	public int toRGBA() {
+		return toRGBA(this);
+	}
+	
 	public float getLength() {
 		return (float)Math.sqrt(getLengthSq());
 	}
@@ -229,6 +240,22 @@ public class Vec4 {
 	 */
 	public static float angle(Vec4 left, Vec4 right) {
 		return (float)Math.acos(dot(left, right));
+	}
+	
+	/**
+	 * Converts to a packed RGBA int value
+	 * <br>X = r
+	 * <br>Y = g
+	 * <br>Z = b
+	 * <br>W = A
+	 * @param val
+	 */
+	public static int toRGBA(Vec4 val) {
+		int r = (int)(val.getX() * 255) & 0xFF;
+		int g = (int)(val.getY() * 255) & 0xFF;
+		int b = (int)(val.getZ() * 255) & 0xFF;
+		int a = (int)(val.getW() * 255) & 0xFF;
+		return ((r << 24) | (g << 16) | (b << 8) | a);
 	}
 
 }
