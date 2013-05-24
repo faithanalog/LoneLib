@@ -119,8 +119,7 @@ public class ColorCubeMesh implements Mesh {
     @Override
     public void render() {
         // render the mesh
-        // Assumes that the proper shaderProgram is already active
-        //TODO: translate to the position necessary for rendering
+        // Assumes that the proper shaderProgram is already active and that the model positions has already been uploaded to the shader
         vao.assign();
         indexBuffer.assign();
         GL11.glEnable(GL31.GL_PRIMITIVE_RESTART);
