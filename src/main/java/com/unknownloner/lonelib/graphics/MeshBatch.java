@@ -32,6 +32,7 @@ public class MeshBatch {
         // render each mesh that's active
         for (Mesh mesh : displayList) {
             program.setUniform(modelLocation, Mat4.IDENTITY.translate(mesh.getPosition()).scale(scale));
+            program.assignUniforms();
             mesh.render();
         }
     }
