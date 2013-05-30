@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.unknownloner.lonelib.util.GLUtil;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
 import com.unknownloner.lonelib.graphics.shaders.uniforms.ShaderUniform;
@@ -37,16 +40,19 @@ public class ShaderProgram {
 	private int vertShader;
 	private int fragShader;
 	
-	public ShaderProgram(String vertShader, String fragShader) {
+	public ShaderProgram(String vertShader, String fragShader) throws LWJGLException {
 		programId = GL20.glCreateProgram();
-		this.vertShader = ShaderLoader.loadShader(vertShader, GL20.GL_VERTEX_SHADER);
-		this.fragShader = ShaderLoader.loadShader(fragShader, GL20.GL_FRAGMENT_SHADER);
+		this.vertShader = GLUtil.loadShader(vertShader, GL20.GL_VERTEX_SHADER);
+		this.fragShader = GLUtil.loadShader(fragShader, GL20.GL_FRAGMENT_SHADER);
 		GL20.glAttachShader(programId, this.vertShader);
 		GL20.glAttachShader(programId, this.fragShader);
 		GL20.glLinkProgram(programId);
+        if (GLUtil.printError("Shader Program") || GL20.glGetProgrami(programId, GL20.GL_LINK_STATUS) == GL11.GL_FALSE) {
+            throw new LWJGLException("Failed to link the Shader Program: " + GL20.glGetProgramInfoLog(programId, GL20.GL_INFO_LOG_LENGTH));
+        }
 	}
 	
-	public ShaderProgram(List<String> attributes, String vertShader, String fragShader) {
+	public ShaderProgram(List<String> attributes, String vertShader, String fragShader) throws LWJGLException {
 		this(vertShader, fragShader);
 		// Loop over the attributes used for this shader and bind them
 		int i = 0;
