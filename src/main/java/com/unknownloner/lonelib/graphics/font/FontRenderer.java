@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
+import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL15;
@@ -25,28 +26,34 @@ import com.unknownloner.lonelib.util.ImageUtil;
 import com.unknownloner.lonelib.util.MathUtil;
 
 public class FontRenderer {
-	
-	
-	public static ShaderProgram globalFontProgram = new ShaderProgram("/shaders/FontShader.vert", "/shaders/FontShader.frag");
+
+
+    public static ShaderProgram globalFontProgram;
 	private static VertexBufferObject data = new VertexBufferObject(GL15.GL_ARRAY_BUFFER, GL15.GL_STREAM_DRAW, 128 * 9 * 4 * 4);
 	private static VertexBufferObject inds = new VertexBufferObject(GL15.GL_ELEMENT_ARRAY_BUFFER, GL15.GL_STATIC_DRAW, 128 * 6 * 2);
-	static {
-		inds.assign();
-		ShortBuffer indBuf = BufferUtil.createShortBuffer(128 * 6);
-		for(short i = 0; i < 128 * 4; i += 4) {
-			short[] ind = new short[] {
-					i,
-					(short)(i + 1),
-					(short)(i + 2),
-					(short)(i + 2),
-					(short)(i + 3),
-					i
-			};
-			indBuf.put(ind);
-		}
-		indBuf.flip();
-		inds.bufferSubData(indBuf, 0);
-	}
+
+    static {
+        inds.assign();
+        ShortBuffer indBuf = BufferUtil.createShortBuffer(128 * 6);
+        for (short i = 0; i < 128 * 4; i += 4) {
+            short[] ind = new short[]{
+                    i,
+                    (short) (i + 1),
+                    (short) (i + 2),
+                    (short) (i + 2),
+                    (short) (i + 3),
+                    i
+            };
+            indBuf.put(ind);
+        }
+        indBuf.flip();
+        inds.bufferSubData(indBuf, 0);
+        try {
+            globalFontProgram = new ShaderProgram("/shaders/FontShader.vert", "/shaders/FontShader.frag");
+        } catch (LWJGLException e) {
+            e.printStackTrace();
+        }
+    }
 	
 	private Texture fontTexture;
 	private ShaderProgram shaderProgram = globalFontProgram;
