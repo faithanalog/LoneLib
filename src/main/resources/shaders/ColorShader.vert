@@ -1,4 +1,6 @@
 #version 330
+#extension ARB_shading_language_packing : require
+
 struct Light
 {
 	vec3 direction;
