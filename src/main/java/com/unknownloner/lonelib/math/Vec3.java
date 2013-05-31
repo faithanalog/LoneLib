@@ -211,5 +211,26 @@ public class Vec3 {
 	public static float angle(Vec3 left, Vec3 right) {
 		return (float)Math.acos(dot(left, right));
 	}
+	
+	public static Vec3 cross(Vec3 l, Vec3 r) {
+		float[] m0 = new float[] {
+				l.y, r.y,
+				l.z, r.z,
+		};
+		float[] m1 = new float[] {
+				l.z, r.z,
+				l.x, r.x
+		};
+		float[] m2 = new float[] {
+				l.x, r.x,
+				l.y, r.y
+		};
+		
+		float x = Mat2.determinant(new Mat2(m0));
+		float y = Mat2.determinant(new Mat2(m1));
+		float z = Mat2.determinant(new Mat2(m2));
+		return new Vec3(x, y, z);
+		
+	}
 
 }

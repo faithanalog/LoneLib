@@ -222,5 +222,12 @@ public class Mat3 {
 		dest[8] = mat.getData()[10]; // this one was referencing m23 - typo?
 		return new Mat3(dest);
 	}
+	
+	public static Vec3 transform(Mat3 mat3, Vec3 vec3) {
+		float x = mat3.data[0] * vec3.x + mat3.data[3] * vec3.y + mat3.data[6] * vec3.z;
+		float y = mat3.data[1] * vec3.x + mat3.data[4] * vec3.y + mat3.data[7] * vec3.z;
+		float z = mat3.data[2] * vec3.x + mat3.data[5] * vec3.y + mat3.data[8] * vec3.z;
+		return new Vec3(x, y, z);
+	}
 
 }
