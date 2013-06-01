@@ -141,7 +141,16 @@ public class Vec3 {
 	public float angle(Vec3 right) {
 		return angle(this, right);
 	}
-	
+
+    /**
+     * Multiplies all components of the vector3 by the scalar value.
+     * @param val to scale by
+     * @return Vec3 scaled
+     */
+    public Vec3 scale(float val) {
+        return new Vec3(x * val, y * val, z * val);
+    }
+
 	@Override
 	public String toString() {
 		return String.format("(%f, %f, %f)", x, y, z);
