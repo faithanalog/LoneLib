@@ -1,6 +1,7 @@
 #version 330
-#extension ARB_shading_language_packing : require
+#extension GL_ARB_shading_language_packing : require
 
+//Light Structure definition
 struct Light
 {
 	vec3 direction;
@@ -8,18 +9,19 @@ struct Light
 	vec4 ambient;
 };
 
-
+//Uniform Matrices
 uniform mat4 Projection = mat4(1.0);
 uniform mat4 Model = mat4(1.0);
 uniform mat4 View = mat4(1.0);
 uniform mat3 NormMatrix = mat3(1.0);
 
-//Lighting stuff
+//Lighting Uniforms
 uniform bool useLighting;
 uniform bool[16] enabledLights;
 uniform Light[16] lights;
 uniform vec4 ambient;
 
+//Attribute Layouts
 layout(location = 0) in vec3 vPosition;
 layout(location = 1) in vec3 vNormal;
 layout(location = 2) in uint iColor;
