@@ -7,10 +7,10 @@ public class VertexArrayObject {
 	public final int vaoID;
 	private boolean deleted;
 	
-	public VertexArrayObject(VertexAttribPointer... pointers) {
+	public VertexArrayObject(IVertexAttribPointer... pointers) {
 		vaoID = GL30.glGenVertexArrays();
 		GL30.glBindVertexArray(vaoID);
-		for(VertexAttribPointer pointer : pointers) {
+		for(IVertexAttribPointer pointer : pointers) {
 			pointer.assign();
 		}
 		GL30.glBindVertexArray(0);
