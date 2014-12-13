@@ -2,10 +2,10 @@ This is a library for use with OpenGL and Java, specifically LWJGL.
 Feel free to fork and optimize/add anything you think may be useful, pull requests to add new features are welcome.
 
 To build to a jar:
-Install maven: http://maven.apache.org/
-Open command prompt/terminal
-Navigate to the root directory of LoneLib (which contains pom.xml)
-type the following:
+1. Install maven: http://maven.apache.org/
+2. Open command prompt/terminal
+3. Navigate to the root directory of LoneLib (which contains pom.xml)
+4. Type the following:
 ```bash
 mvn clean install
 ```
@@ -15,6 +15,7 @@ And it will put a Jar called LoneLib-1.0-SNAPSHOT.jar in a new folder called tar
 ------------------------------------------------------------
 
 Guidelines for usage: (Will be moved to wiki possibly later)
+
 1. Generally avoid making references to any classes in LoneLib before creating a GL context (Display.create()).
 This is because some classes (such as FontRenderer) execute code which requires a GL context to exist upon class 
 initialization.
@@ -22,6 +23,7 @@ initialization.
 2. When updating data in a VertexBufferObject/Texture, using the object's methods will always bind the buffer/texture
 every time a change is made. Only use them when updating data if you don't know that the buffer/texture is already
 bound.
+
 EX: We have a VBO created like this
 VertexBufferObject vbo = new VertexBufferObject(GL15.GL_ARRAY_BUFFER, GL15.GL_STREAM_DRAW, 1000);
 And we want to update it's data. We have 3 ByteBuffers, data1, data2, data3
