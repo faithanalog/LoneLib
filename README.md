@@ -27,7 +27,6 @@ bound.
 EX: We have a VBO created like this
 VertexBufferObject vbo = new VertexBufferObject(GL15.GL_ARRAY_BUFFER, GL15.GL_STREAM_DRAW, 1000);
 And we want to update it's data. We have 3 ByteBuffers, data1, data2, data3
-
 Don't do this:
 ```
 public void update() {
