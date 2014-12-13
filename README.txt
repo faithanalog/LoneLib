@@ -17,7 +17,9 @@ Guidelines for usage: (Will be moved to wiki possibly later)
 1. Generally avoid making references to any classes in LoneLib before creating a GL context (Display.create()).
 This is because some classes (such as FontRenderer) execute code which requires a GL context to exist upon class initialization.
 
-2. When updating data in a VertexBufferObject/Texture, using the object's methods will always bind the buffer/texture every time a change is made. Only use them when updating data if you don't know that the buffer/texture is already bound.
+2. When updating data in a VertexBufferObject/Texture, using the object's methods will always bind the buffer/texture
+every time a change is made. Only use them when updating data if you don't know that the buffer/texture is already
+bound.
 EX: We have a VBO created like this
 VertexBufferObject vbo = new VertexBufferObject(GL15.GL_ARRAY_BUFFER, GL15.GL_STREAM_DRAW, 1000);
 And we want to update it's data. We have 3 ByteBuffers, data1, data2, data3
