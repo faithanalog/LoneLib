@@ -7,7 +7,7 @@ Open command prompt/terminal
 Navigate to the root directory of LoneLib (which contains pom.xml)
 type the following:
 
-mvn clean install
+`mvn clean install
 
 And it will put a Jar called LoneLib-1.0-SNAPSHOT.jar in a new folder called target
 
@@ -26,24 +26,28 @@ VertexBufferObject vbo = new VertexBufferObject(GL15.GL_ARRAY_BUFFER, GL15.GL_ST
 And we want to update it's data. We have 3 ByteBuffers, data1, data2, data3
 
 Don't do this:
+```
 public void update() {
   vbo.bufferSubData(data1, 0);
   vbo.bufferSubData(data2, 0);
   vbo.bufferSubData(data3, 0);
 }
-
+```
 Do this instead:
+```
 public void update() {
   vbo.assign();
   GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, data1);
   GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, data2);
   GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, data3);
 }
-
+```
 But it's perfectly fine to do this:
+```
 public void update() {
   vbo.bufferSubData(data1, 0);
 }
+```
 
 3. When rendering dynamic text, the font renderer splits the input string into chunks of 128 characters for rendering. 
 The less chunks of 128 characters there are, the more efficient the renderer will be.
