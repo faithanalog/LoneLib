@@ -23,8 +23,7 @@ initialization.
 
 2. When updating data in a VertexBufferObject/Texture, using the object's methods will always bind the buffer/texture
 every time a change is made. Only use them when updating data if you don't know that the buffer/texture is already
-bound.
-
+bound. 
 EX: We have a VBO created like this
 VertexBufferObject vbo = new VertexBufferObject(GL15.GL_ARRAY_BUFFER, GL15.GL_STREAM_DRAW, 1000);
 And we want to update it's data. We have 3 ByteBuffers, data1, data2, data3
@@ -52,7 +51,6 @@ public void update() {
   vbo.bufferSubData(data1, 0);
 }
 ```
-
 3. When rendering dynamic text, the font renderer splits the input string into chunks of 128 characters for rendering. 
 The less chunks of 128 characters there are, the more efficient the renderer will be.
 
