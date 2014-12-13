@@ -15,7 +15,8 @@ And it will put a Jar called LoneLib-1.0-SNAPSHOT.jar in a new folder called tar
 
 Guidelines for usage: (Will be moved to wiki possibly later)
 1. Generally avoid making references to any classes in LoneLib before creating a GL context (Display.create()).
-This is because some classes (such as FontRenderer) execute code which requires a GL context to exist upon class initialization.
+This is because some classes (such as FontRenderer) execute code which requires a GL context to exist upon class 
+initialization.
 
 2. When updating data in a VertexBufferObject/Texture, using the object's methods will always bind the buffer/texture
 every time a change is made. Only use them when updating data if you don't know that the buffer/texture is already
@@ -44,6 +45,7 @@ public void update() {
   vbo.bufferSubData(data1, 0);
 }
 
-3. When rendering dynamic text, the font renderer splits the input string into chunks of 128 characters for rendering. The less chunks of 128 characters there are,the more efficient the renderer will be.
+3. When rendering dynamic text, the font renderer splits the input string into chunks of 128 characters for rendering. 
+The less chunks of 128 characters there are,the more efficient the renderer will be.
 
 More to come as more features are put in...
