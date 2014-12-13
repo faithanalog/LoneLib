@@ -27,6 +27,7 @@ bound.
 EX: We have a VBO created like this
 VertexBufferObject vbo = new VertexBufferObject(GL15.GL_ARRAY_BUFFER, GL15.GL_STREAM_DRAW, 1000);
 And we want to update it's data. We have 3 ByteBuffers, data1, data2, data3
+
 Don't do this:
 ```
 public void update() {
@@ -50,7 +51,7 @@ public void update() {
   vbo.bufferSubData(data1, 0);
 }
 ```
-3. When rendering dynamic text, the font renderer splits the input string into chunks of 128 characters for rendering. 
+3.When rendering dynamic text, the font renderer splits the input string into chunks of 128 characters for rendering. 
 The less chunks of 128 characters there are, the more efficient the renderer will be.
 
 More to come as more features are put in...
