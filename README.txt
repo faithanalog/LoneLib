@@ -46,6 +46,6 @@ public void update() {
 }
 
 3. When rendering dynamic text, the font renderer splits the input string into chunks of 128 characters for rendering. 
-The less chunks of 128 characters there are,the more efficient the renderer will be.
+The less chunks of 128 characters there are, the more efficient the renderer will be.
 
 More to come as more features are put in...
