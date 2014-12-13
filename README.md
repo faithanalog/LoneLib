@@ -2,6 +2,7 @@ This is a library for use with OpenGL and Java, specifically LWJGL.
 Feel free to fork and optimize/add anything you think may be useful, pull requests to add new features are welcome.
 
 To build to a jar:
+
 1. Install maven: http://maven.apache.org/
 2. Open command prompt/terminal
 3. Navigate to the root directory of LoneLib (which contains pom.xml)
