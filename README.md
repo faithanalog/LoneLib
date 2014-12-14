@@ -24,9 +24,9 @@ initialization.
 2. When updating data in a VertexBufferObject/Texture, using the object's methods will always bind the buffer/texture
 every time a change is made. Only use them when updating data if you don't know that the buffer/texture is already
 bound. 
-EX: We have a VBO created like this
-VertexBufferObject vbo = new VertexBufferObject(GL15.GL_ARRAY_BUFFER, GL15.GL_STREAM_DRAW, 1000);
-And we want to update it's data. We have 3 ByteBuffers, data1, data2, data3
+EX: We have a VBO created like with
+`VertexBufferObject vbo = new VertexBufferObject(GL15.GL_ARRAY_BUFFER, GL15.GL_STREAM_DRAW, 1000);`
+And we want to update it's data. We have 3 ByteBuffers, `data1`, `data2`, `data3`
 
 Don't do this:
 ```
