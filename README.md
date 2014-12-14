@@ -11,7 +11,7 @@ To build to a jar:
 mvn clean install
 ```
 
-And it will put a Jar called LoneLib-1.0-SNAPSHOT.jar in a new folder called target
+It will put a Jar called LoneLib-1.0-SNAPSHOT.jar in a new folder called target
 
 ------------------------------------------------------------
 
@@ -25,11 +25,13 @@ initialization.
 every time a change is made. Only use them when updating data if you don't know that the buffer/texture is already
 bound. 
 EX: We have a VBO created like with
-`VertexBufferObject vbo = new VertexBufferObject(GL15.GL_ARRAY_BUFFER, GL15.GL_STREAM_DRAW, 1000);`
-And we want to update it's data. We have 3 ByteBuffers, `data1`, `data2`, `data3`
+```java
+VertexBufferObject vbo = new VertexBufferObject(GL15.GL_ARRAY_BUFFER, GL15.GL_STREAM_DRAW, 1000);
+```
+and we want to update it's data. We have 3 ByteBuffers, `data1`, `data2`, `data3`
 
 Don't do this:
-```
+```java
 public void update() {
   vbo.bufferSubData(data1, 0);
   vbo.bufferSubData(data2, 0);
@@ -37,7 +39,7 @@ public void update() {
 }
 ```
 Do this instead:
-```
+```java
 public void update() {
   vbo.assign();
   GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, data1);
@@ -46,7 +48,7 @@ public void update() {
 }
 ```
 But it's perfectly fine to do this:
-```
+```java
 public void update() {
   vbo.bufferSubData(data1, 0);
 }
